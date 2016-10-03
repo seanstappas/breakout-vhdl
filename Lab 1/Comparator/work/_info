@@ -9,34 +9,34 @@ z2
 cModel Technology
 dC:/altera_lite/16.0
 Eg30_blockergame
-Z0 w1474758524
+Z0 w1474988476
 Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
 Z2 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
-Z3 dY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Comparator
-Z4 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd
-Z5 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd
+Z3 dC:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Comparator
+Z4 8C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd
+Z5 FC:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd
 l0
-L5
-VZ6NI_55mHzikNziRZ3ji]2
-!s100 8P@=diBe^>3]lmFF69OC60
+L7
+VFE3@k5KcO23WlJI1ghf<[0
+!s100 K9z4k>`Cih2jY;K<XdIjY2
 Z6 OV;C;10.4d;61
 32
-Z7 !s110 1474761404
+Z7 !s110 1474992030
 !i10b 1
-Z8 !s108 1474761404.000000
-Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd|
-Z10 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd|
+Z8 !s108 1474992030.000000
+Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd|
+Z10 !s107 C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd|
 !i113 1
 Z11 o-work work -2002 -explicit
 Z12 tExplicit 1
 Aencoder
 R1
 R2
-DEx4 work 15 g30_blockergame 0 22 Z6NI_55mHzikNziRZ3ji]2
-l14
-L13
-VJ`WSKTgaV]k<@mjE1zC1[1
-!s100 EV;jVfKL7<:L<<JPlmA6B0
+DEx4 work 15 g30_blockergame 0 22 FE3@k5KcO23WlJI1ghf<[0
+l16
+L15
+VEb?mV9:@QT];JEBoYC91c1
+!s100 SF>c;^H;hGN>kOH]mW;M00
 R6
 32
 R7
@@ -48,24 +48,24 @@ R10
 R11
 R12
 Eg30_blockergame_vhd_tst
-Z13 w1474762215
+Z13 w1474991961
 Z14 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 R1
 R2
 R3
-Z15 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht
-Z16 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht
+Z15 8C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht
+Z16 FC:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht
 l0
-L31
-VM3P=Dc7LIVIPCWe7Vj1`d2
-!s100 oJF3Ega8_[6kVno48^Dl?3
+L33
+VzEldiG8<;e^<c7KdNo0[21
+!s100 Rig:WMJYH8?HhO]^M?n@h2
 R6
 32
-Z17 !s110 1474762222
+R7
 !i10b 1
-Z18 !s108 1474762222.000000
-Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht|
-Z20 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht|
+R8
+Z17 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht|
+Z18 !s107 C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_BlockerGame.vht|
 !i113 1
 R11
 R12
@@ -73,39 +73,39 @@ Ag30_blockergame_arch
 R14
 R1
 R2
-DEx4 work 23 g30_blockergame_vhd_tst 0 22 M3P=Dc7LIVIPCWe7Vj1`d2
-l46
-L33
-V@O>OlRRTiG_A@8JlAA1]Y1
-!s100 FXAX]Q4MO]C8MbJ9<<@In3
+DEx4 work 23 g30_blockergame_vhd_tst 0 22 zEldiG8<;e^<c7KdNo0[21
+l48
+L35
+V]jCN?8omDdziP;e>FE[hJ3
+!s100 QPNLaE6UlmFfV0KgVh;`R2
 R6
 32
-R17
+R7
 !i10b 1
+R8
+R17
 R18
-R19
-R20
 !i113 1
 R11
 R12
 Eg30_comp6
-Z21 w1474077324
+Z19 w1474077324
 R1
 R2
-Z22 dY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1
-Z23 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd
-Z24 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd
+Z20 dY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1
+Z21 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd
+Z22 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd
 l0
 L25
 V?J_Z>gb[b2DmoE2?31SC<3
 !s100 =@?YUD@_S1b632;N1fb_I3
 R6
 32
-Z25 !s110 1474752594
+Z23 !s110 1474752594
 !i10b 1
-Z26 !s108 1474752594.000000
-Z27 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd|
-Z28 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd|
+Z24 !s108 1474752594.000000
+Z25 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd|
+Z26 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd|
 !i113 1
 R11
 R12
@@ -119,32 +119,32 @@ Vj=RC=:FB<@SXU]1XFjo190
 !s100 2c<IUfzTlXhZIkXIcQmM`0
 R6
 32
-R25
+R23
 !i10b 1
+R24
+R25
 R26
-R27
-R28
 !i113 1
 R11
 R12
 Eg30_lab1
-Z29 w1474077430
+Z27 w1474077430
 R1
 R2
-R22
-Z30 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd
-Z31 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd
+R20
+Z28 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd
+Z29 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd
 l0
 L25
 VJMA7h:W5_Sg[U8;Ezb[la0
 !s100 QT>B<;WnW[CWGD>DN^NST3
 R6
 32
-Z32 !s110 1474752595
+Z30 !s110 1474752595
 !i10b 1
-Z33 !s108 1474752595.000000
-Z34 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd|
-Z35 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd|
+Z31 !s108 1474752595.000000
+Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd|
+Z33 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd|
 !i113 1
 R11
 R12
@@ -158,33 +158,33 @@ VcL[PgUS4a3VC_f4A@0^Y[0
 !s100 QXPz7I<R5i3KBMQbDl1HF0
 R6
 32
-R32
+R30
 !i10b 1
+R31
+R32
 R33
-R34
-R35
 !i113 1
 R11
 R12
 Eg30_lab1_vhd_tst
-Z36 w1474752817
+Z34 w1474752817
 R14
 R1
 R2
-R22
-Z37 8Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht
-Z38 FY:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht
+R20
+Z35 8Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht
+Z36 FY:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht
 l0
 L35
 V_30O2a@F836Xm>mHG[]>B0
 !s100 h9oTb0m;:aGGn:AMR@@K_2
 R6
 32
-Z39 !s110 1474752822
+Z37 !s110 1474752822
 !i10b 1
-Z40 !s108 1474752822.000000
-Z41 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht|
-Z42 !s107 Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht|
+Z38 !s108 1474752822.000000
+Z39 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht|
+Z40 !s107 Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht|
 !i113 1
 R11
 R12
@@ -199,11 +199,11 @@ V[zV9_@Y5CgXJmi;SiggNH1
 !s100 eaDhnn@I;;HjP=TZ3W=UM3
 R6
 32
-R39
+R37
 !i10b 1
+R38
+R39
 R40
-R41
-R42
 !i113 1
 R11
 R12

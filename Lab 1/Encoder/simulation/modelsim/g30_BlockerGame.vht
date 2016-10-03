@@ -1,3 +1,5 @@
+-- Sean Stappas, Gabriel Chootong
+-- Group 30
 -- Copyright (C) 1991-2013 Altera Corporation
 -- Your use of Altera Corporation's design tools, logic functions 
 -- and other software and tools, and its AMPP partner logic 
@@ -60,7 +62,7 @@ END PROCESS init;
                                            
 always : PROCESS
 	variable i : integer := 1;
-	type TEST_ARRAY is array(9 downto 0) of integer;
+	type TEST_ARRAY is array(0 to 9) of integer;
 	constant ARBITRARY_INPUT : TEST_ARRAY := (3,7,29,301,452,1502,12304,20433,30001,32000);
 BEGIN
 	--- test 16 valid input patterns (1 to 2^15)
@@ -74,7 +76,7 @@ BEGIN
 	BLOCK_COL <= std_logic_vector(to_unsigned(0, BLOCK_COL'length));
 	wait for 10 ns;
 	
-	--- test some arbitrary input
+	--- test some arbitrary input (set in above array)
 	i := 0;
 	while i < 10 loop
 		BLOCK_COL <= std_logic_vector(to_unsigned(ARBITRARY_INPUT(i), BLOCK_COL'length));

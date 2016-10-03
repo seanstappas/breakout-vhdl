@@ -1,0 +1,68 @@
+# Reading C:/Altera/modelsim_ase/tcl/vsim/pref.tcl
+# do g30_lab2_run_msim_gate_vhdl.do
+# if {[file exists gate_work]} {
+# 	vdel -lib gate_work -all
+# }
+# vlib gate_work
+# vmap work gate_work
+# Model Technology ModelSim ALTERA vmap 10.4d Lib Mapping Utility 2015.12 Dec 30 2015
+# vmap work gate_work 
+# Copying C:/Altera/modelsim_ase/win32aloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# 
+# vcom -93 -work work {g30_lab2.vho}
+# Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
+# Start time: 13:28:15 on Oct 02,2016
+# vcom -reportprogress 300 -93 -work work g30_lab2.vho 
+# -- Loading package STANDARD
+# ** Error: g30_lab2.vho(29): Library cycloneii not found.
+# ** Error: g30_lab2.vho(31): (vcom-1136) Unknown identifier "CYCLONEII".
+# 
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# ** Error: g30_lab2.vho(34): VHDL Compiler exiting
+# End time: 13:28:15 on Oct 02,2016, Elapsed time: 0:00:00
+# Errors: 3, Warnings: 0
+# ** Error: C:/Altera/modelsim_ase/win32aloem/vcom failed.
+# Error in macro ./g30_lab2_run_msim_gate_vhdl.do line 8
+# C:/Altera/modelsim_ase/win32aloem/vcom failed.
+#     while executing
+# "vcom -93 -work work {g30_lab2.vho}"
+vsim -gui +altera -l msim_transcript -do g30_lab2_run_msim_gate_vhdl.do rtl_work.g30_64_6_encoder
+# vsim -gui "+altera" -l msim_transcript -do "g30_lab2_run_msim_gate_vhdl.do" rtl_work.g30_64_6_encoder 
+# Start time: 13:28:32 on Oct 02,2016
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading rtl_work.g30_64_6_encoder(encoder)
+# Loading rtl_work.g30_16_4_encoder(encoder)
+# do g30_lab2_run_msim_gate_vhdl.do
+# if {[file exists gate_work]} {
+# 	vdel -lib gate_work -all
+# }
+# vlib gate_work
+# vmap work gate_work
+# Model Technology ModelSim ALTERA vmap 10.4d Lib Mapping Utility 2015.12 Dec 30 2015
+# vmap work gate_work 
+# Modifying modelsim.ini
+# 
+# vcom -93 -work work {g30_lab2.vho}
+# Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
+# Start time: 13:28:34 on Oct 02,2016
+# vcom -reportprogress 300 -93 -work work g30_lab2.vho 
+# -- Loading package STANDARD
+# ** Error: g30_lab2.vho(29): Library cycloneii not found.
+# ** Error: g30_lab2.vho(31): (vcom-1136) Unknown identifier "CYCLONEII".
+# 
+# -- Loading package TEXTIO
+# -- Loading package std_logic_1164
+# ** Error: g30_lab2.vho(34): VHDL Compiler exiting
+# End time: 13:28:34 on Oct 02,2016, Elapsed time: 0:00:00
+# Errors: 3, Warnings: 0
+# ** Error: C:/Altera/modelsim_ase/win32aloem/vcom failed.
+# Error in macro ./g30_lab2_run_msim_gate_vhdl.do line 8
+# C:/Altera/modelsim_ase/win32aloem/vcom failed.
+#     while executing
+# "vcom -93 -work work {g30_lab2.vho}"
+# End time: 13:28:47 on Oct 02,2016, Elapsed time: 0:00:15
+# Errors: 6, Warnings: 0
