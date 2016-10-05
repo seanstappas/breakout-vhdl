@@ -40,7 +40,6 @@ BEGIN
 	END PROCESS init;
 														  
 	always : PROCESS
-		variable i : integer := 0;
 	BEGIN
 		--- test 64 valid input patterns (bit at index 0, 1, 2 ... 62, 63)
 		for i in 0 to 63 loop

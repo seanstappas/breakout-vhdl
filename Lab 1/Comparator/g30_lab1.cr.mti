@@ -1,26 +1,20 @@
-{Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_lab1.vhd}
+{C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd} {1 {vcom -work work -2002 -explicit -stats=none {C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/g30_16_4_Encoder.vhd}
 Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
--- Compiling entity g30_lab1
--- Compiling architecture bdf_type of g30_lab1
+-- Compiling entity g30_16_4_Encoder
+-- Compiling architecture implementation1 of g30_16_4_Encoder
 
-} {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/g30_comp6.vhd}
-Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity g30_comp6
--- Compiling architecture bdf_type of g30_comp6
-
-} {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/simulation/modelsim/g30_lab1.vht} {1 {vcom -work work -2002 -explicit -stats=none {Y:\OneDrive - McGill University\McGill\Semesters\Fall 2016\ECSE-323 Digital Systems Design\Labs\Lab 1\simulation\modelsim\g30_lab1.vht}
+} {} {}} {C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_16_4_Encoder.vht} {2 {vcom -work work -2002 -explicit -stats=none {C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_16_4_Encoder.vht}
 Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Loading package NUMERIC_STD
--- Compiling entity g30_lab1_vhd_tst
--- Compiling architecture g30_lab1_arch of g30_lab1_vhd_tst
+-- Compiling entity g30_16_4_Encoder_vhd_tst
+-- Compiling architecture g30_16_4_Encoder_arch of g30_16_4_Encoder_vhd_tst
+** Warning: C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 1/Encoder/simulation/modelsim/g30_16_4_Encoder.vht(39): (vcom-1073) Non-locally static choice (association #1, choice #1) is allowed only if it is the only choice of the only association.
+
 
 } {} {}}

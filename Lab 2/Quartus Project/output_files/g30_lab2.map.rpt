@@ -1,5 +1,5 @@
-Analysis & Elaboration report for g30_lab2
-Mon Oct 03 13:59:16 2016
+Analysis & Synthesis report for g30_lab2
+Mon Oct 03 23:08:39 2016
 Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -7,10 +7,16 @@ Quartus II 64-Bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edit
 ; Table of Contents ;
 ---------------------
   1. Legal Notice
-  2. Analysis & Elaboration Summary
-  3. Parallel Compilation
-  4. Analysis & Elaboration Settings
-  5. Analysis & Elaboration Messages
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. General Register Statistics
+  9. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 10. Elapsed Time Per Partition
+ 11. Analysis & Synthesis Messages
 
 
 
@@ -34,38 +40,27 @@ applicable agreement for further details.
 
 
 +--------------------------------------------------------------------------------------+
-; Analysis & Elaboration Summary                                                       ;
+; Analysis & Synthesis Summary                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Analysis & Elaboration Status      ; Successful - Mon Oct 03 13:59:16 2016           ;
+; Analysis & Synthesis Status        ; Successful - Mon Oct 03 23:08:39 2016           ;
 ; Quartus II 64-Bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; g30_lab2                                        ;
 ; Top-level Entity Name              ; g30_64_6_encoder                                ;
 ; Family                             ; Cyclone II                                      ;
-; Total logic elements               ; N/A until Partition Merge                       ;
-;     Total combinational functions  ; N/A until Partition Merge                       ;
-;     Dedicated logic registers      ; N/A until Partition Merge                       ;
-; Total registers                    ; N/A until Partition Merge                       ;
-; Total pins                         ; N/A until Partition Merge                       ;
-; Total virtual pins                 ; N/A until Partition Merge                       ;
-; Total memory bits                  ; N/A until Partition Merge                       ;
-; Embedded Multiplier 9-bit elements ; N/A until Partition Merge                       ;
-; Total PLLs                         ; N/A until Partition Merge                       ;
+; Total logic elements               ; 104                                             ;
+;     Total combinational functions  ; 104                                             ;
+;     Dedicated logic registers      ; 0                                               ;
+; Total registers                    ; 0                                               ;
+; Total pins                         ; 71                                              ;
+; Total virtual pins                 ; 0                                               ;
+; Total memory bits                  ; 0                                               ;
+; Embedded Multiplier 9-bit elements ; 0                                               ;
+; Total PLLs                         ; 0                                               ;
 +------------------------------------+-------------------------------------------------+
 
 
-Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
-+-------------------------------------+
-; Parallel Compilation                ;
-+----------------------------+--------+
-; Processors                 ; Number ;
-+----------------------------+--------+
-; Number detected on machine ; 2      ;
-; Maximum allowed            ; 1      ;
-+----------------------------+--------+
-
-
 +----------------------------------------------------------------------------------------------------------------------+
-; Analysis & Elaboration Settings                                                                                      ;
+; Analysis & Synthesis Settings                                                                                        ;
 +----------------------------------------------------------------------------+--------------------+--------------------+
 ; Option                                                                     ; Setting            ; Default Value      ;
 +----------------------------------------------------------------------------+--------------------+--------------------+
@@ -149,14 +144,113 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +----------------------------------------------------------------------------+--------------------+--------------------+
 
 
-+---------------------------------+
-; Analysis & Elaboration Messages ;
-+---------------------------------+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 8      ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                                 ;
++----------------------------------+-----------------+-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                                                                                          ; Library ;
++----------------------------------+-----------------+-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
+; g30_16_4_encoder.vhd             ; yes             ; User VHDL File  ; C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd ;         ;
+; g30_64_6_encoder.vhd             ; yes             ; User VHDL File  ; C:/Users/Sean/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd ;         ;
++----------------------------------+-----------------+-----------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+---------+
+
+
++------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary          ;
++---------------------------------------------+--------+
+; Resource                                    ; Usage  ;
++---------------------------------------------+--------+
+; Estimated Total logic elements              ; 104    ;
+;                                             ;        ;
+; Total combinational functions               ; 104    ;
+; Logic element usage by number of LUT inputs ;        ;
+;     -- 4 input functions                    ; 83     ;
+;     -- 3 input functions                    ; 17     ;
+;     -- <=2 input functions                  ; 4      ;
+;                                             ;        ;
+; Logic elements by mode                      ;        ;
+;     -- normal mode                          ; 104    ;
+;     -- arithmetic mode                      ; 0      ;
+;                                             ;        ;
+; Total registers                             ; 0      ;
+;     -- Dedicated logic registers            ; 0      ;
+;     -- I/O registers                        ; 0      ;
+;                                             ;        ;
+; I/O pins                                    ; 71     ;
+; Embedded Multiplier 9-bit elements          ; 0      ;
+; Maximum fan-out node                        ; CODE~3 ;
+; Maximum fan-out                             ; 6      ;
+; Total fan-out                               ; 398    ;
+; Average fan-out                             ; 2.27   ;
++---------------------------------------------+--------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                     ;
++--------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------+--------------+
+; Compilation Hierarchy Node     ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                         ; Library Name ;
++--------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------+--------------+
+; |g30_64_6_encoder              ; 104 (98)          ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 71   ; 0            ; |g30_64_6_encoder                           ; work         ;
+;    |g30_16_4_encoder:Encoder0| ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |g30_64_6_encoder|g30_16_4_encoder:Encoder0 ; work         ;
+;    |g30_16_4_encoder:Encoder1| ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |g30_64_6_encoder|g30_16_4_encoder:Encoder1 ; work         ;
+;    |g30_16_4_encoder:Encoder3| ; 4 (4)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |g30_64_6_encoder|g30_16_4_encoder:Encoder3 ; work         ;
++--------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 0     ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 0     ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                 ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------+
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |g30_64_6_encoder|CODE                                     ;
+; 12:1               ; 2 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; No         ; |g30_64_6_encoder|g30_16_4_encoder:Encoder3|ERROR_AND_CODE ;
+; 40:1               ; 2 bits    ; 52 LEs        ; 40 LEs               ; 12 LEs                 ; No         ; |g30_64_6_encoder|CODE                                     ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:00     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
 Info: *******************************************************************
-Info: Running Quartus II 64-Bit Analysis & Elaboration
+Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Mon Oct 03 13:59:14 2016
-Info: Command: quartus_map --read_settings_files=on --write_settings_files=off g30_lab2 -c g30_lab2 --analysis_and_elaboration
+    Info: Processing started: Mon Oct 03 23:08:37 2016
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off g30_lab2 -c g30_lab2
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 2 design units, including 1 entities, in source file g30_16_4_encoder.vhd
     Info (12022): Found design unit 1: g30_16_4_encoder-encoder
@@ -171,9 +265,15 @@ Info (12021): Found 1 design units, including 1 entities, in source file test.bd
     Info (12023): Found entity 1: test
 Info (12127): Elaborating entity "g30_64_6_encoder" for the top level hierarchy
 Info (12128): Elaborating entity "g30_16_4_encoder" for hierarchy "g30_16_4_encoder:Encoder3"
-Info: Quartus II 64-Bit Analysis & Elaboration was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 503 megabytes
-    Info: Processing ended: Mon Oct 03 13:59:16 2016
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 175 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 64 input pins
+    Info (21059): Implemented 7 output pins
+    Info (21061): Implemented 104 logic cells
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 525 megabytes
+    Info: Processing ended: Mon Oct 03 23:08:39 2016
     Info: Elapsed time: 00:00:02
     Info: Total CPU time (on all processors): 00:00:02
 

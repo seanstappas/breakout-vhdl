@@ -1,5 +1,3 @@
--- Sean Stappas, Gabriel Chootong
--- Group 30
 -- Copyright (C) 1991-2013 Altera Corporation
 -- Your use of Altera Corporation's design tools, logic functions 
 -- and other software and tools, and its AMPP partner logic 
@@ -19,72 +17,66 @@
 -- suit user's needs .Comments are provided in each section to help the user  
 -- fill out necessary details.                                                
 -- ***************************************************************************
--- Generated on "09/24/2016 19:09:09"
+-- Generated on "10/05/2016 00:28:15"
                                                             
--- Vhdl Test Bench template for design  :  g30_BlockerGame
+-- Vhdl Test Bench template for design  :  g30_7_segment_decoder
 -- 
 -- Simulation tool : ModelSim-Altera (VHDL)
 -- 
+--
+-- entity name: g30_7_segment_decoder_vhd_tst
+--
+-- Copyright (C) 2016 Gabriel Chootong, Sean Stappas
+-- Version 1.0
+-- Authors: Gabriel Chootong, Sean Stappas
+-- Date: October 4, 2016
+--
+-- This testbench's purpose is to test the 7-segment decoder circuit
 
 LIBRARY ieee;                                               
-USE ieee.std_logic_1164.all;
-USE ieee.numeric_std.all;                                
+USE ieee.std_logic_1164.all; 
+USE ieee.numeric_std.ALL;
 
-ENTITY g30_BlockerGame_vhd_tst IS
-END g30_BlockerGame_vhd_tst;
-ARCHITECTURE g30_BlockerGame_arch OF g30_BlockerGame_vhd_tst IS
+ENTITY g30_7_segment_decoder_vhd_tst IS
+END g30_7_segment_decoder_vhd_tst;
+ARCHITECTURE g30_7_segment_decoder_arch OF g30_7_segment_decoder_vhd_tst IS
 -- constants                                                 
 -- signals                                                   
-SIGNAL BLOCK_COL : STD_LOGIC_VECTOR(15 DOWNTO 0);
-SIGNAL CODE : STD_LOGIC_VECTOR(3 DOWNTO 0);
-SIGNAL ERROR : STD_LOGIC;
-COMPONENT g30_BlockerGame
+SIGNAL asci_code : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL segments : STD_LOGIC_VECTOR(6 DOWNTO 0);
+COMPONENT g30_7_segment_decoder
 	PORT (
-	BLOCK_COL : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
-	CODE : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-	ERROR : OUT STD_LOGIC
+	asci_code : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+	segments : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
 	);
 END COMPONENT;
 BEGIN
-	i1 : g30_BlockerGame
+	i1 : g30_7_segment_decoder
 	PORT MAP (
 -- list connections between master ports and signals
-	BLOCK_COL => BLOCK_COL,
-	CODE => CODE,
-	ERROR => ERROR
+	asci_code => asci_code,
+	segments => segments
 	);
 init : PROCESS                                               
 -- variable declarations                                     
 BEGIN                                                        
         -- code that executes only once                      
 WAIT;                                                       
-END PROCESS init;
-                                           
-always : PROCESS
-	variable i : integer := 1;
-	type TEST_ARRAY is array(0 to 9) of integer;
-	constant ARBITRARY_INPUT : TEST_ARRAY := (3,7,29,301,452,1502,12304,20433,30001,32000);
-BEGIN
-	--- test 16 valid input patterns (1 to 2^15)
-	while i <= 32768 loop
-		BLOCK_COL <= std_logic_vector(to_unsigned(i, BLOCK_COL'length));
-		i := i * 2;
+END PROCESS init;                                           
+always : PROCESS                                              
+-- optional sensitivity list                                  
+-- (        )                                                 
+-- variable declarations                                      
+BEGIN                
+		
+		asci_code <= "0000000"; -- first value of input code
 		wait for 10 ns;
-	end loop;
-	
-	--- test 0-input (error condition)
-	BLOCK_COL <= std_logic_vector(to_unsigned(0, BLOCK_COL'length));
-	wait for 10 ns;
-	
-	--- test some arbitrary input (set in above array)
-	i := 0;
-	while i < 10 loop
-		BLOCK_COL <= std_logic_vector(to_unsigned(ARBITRARY_INPUT(i), BLOCK_COL'length));
-		i := i + 1;
-		wait for 10 ns;
-	end loop;
-	
-	wait;                                                     
-END PROCESS always;
-
-END g30_BlockerGame_arch;
+		
+		for i in 0 to 127 loop  -- loop through all possibilities at least once (since input has 7 bits, there are 128 possibilities)
+			asci_code <= std_logic_vector(unsigned(asci_code) + 1); -- increment signal by one each time.
+			wait for 10 ns;     
+		end loop;                                         
+        -- code executes for every event on sensitivity list  
+WAIT;                                                        
+END PROCESS always;                                          
+END g30_7_segment_decoder_arch;

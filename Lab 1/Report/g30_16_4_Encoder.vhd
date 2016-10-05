@@ -1,7 +1,9 @@
--- 16-bit input 4-bit output encoder
--- ECSE 323: Lab 1, group 30
+-- 16-4 Encoder
+--
+-- ECSE 323: Lab 1, Group 30
 -- Authors: Gabriel Chootong, Sean Stappas
 -- September 26, 2016
+--
 -- The purpose of this component is to output the index of the least significant bit that is set to "1" of a 16-bit signal.
 -- This component has two output signals, a 4-bit signal called "CODE" and a 1-bit signal called "ERROR".
 -- The index will be represented by the "CODE" signal.
