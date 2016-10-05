@@ -14,15 +14,15 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity g30_7_segment_decoder is
-port( asci_code : in std_logic_vector(6 downto 0);
-		segments : out std_logic_vector(6 downto 0));
+port( ASCII_CODE : in std_logic_vector(6 downto 0);
+		SEGMENTS : out std_logic_vector(6 downto 0));
 
 end g30_7_segment_decoder;
 
 architecture segment_decoder of g30_7_segment_decoder is
 
 begin
-with asci_code select segments <=
+with ASCII_CODE select SEGMENTS <=
 	"1000000" when "0110000",-- 0
 	"1111001" when "0110001",-- 1
 	"0100100" when "0110010",-- 2

@@ -1,11 +1,19 @@
-{Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht} {2 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht}
+{Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd}
+Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity g30_keyboard_to_LED
+-- Compiling architecture arch of g30_keyboard_to_LED
+
+} {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht} {2 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht}
 Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Loading package STANDARD
 -- Loading package TEXTIO
 -- Loading package std_logic_1164
 -- Compiling entity g30_64_6_encoder_vhd_tst
 -- Compiling architecture g30_64_6_encoder_arch of g30_64_6_encoder_vhd_tst
-** Warning: Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht(47): (vcom-1073) Non-locally static choice (association #1, choice #1) is allowed only if it is the only choice of the only association.
+** Warning: Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht(46): (vcom-1073) Non-locally static choice (association #1, choice #1) is allowed only if it is the only choice of the only association.
 
 
 } {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd}
@@ -16,6 +24,14 @@ Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Compiling entity g30_keyboard_encoder
 -- Compiling architecture keyboard_encoder of g30_keyboard_encoder
 
+} {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd}
+Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity g30_16_4_encoder
+-- Compiling architecture encoder of g30_16_4_encoder
+
 } {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht} {2 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht}
 Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Loading package STANDARD
@@ -25,14 +41,6 @@ Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
 -- Compiling architecture g30_keyboard_encoder_arch of g30_keyboard_encoder_vhd_tst
 ** Warning: Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht(44): (vcom-1073) Non-locally static choice (association #1, choice #1) is allowed only if it is the only choice of the only association.
 
-
-} {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd}
-Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Compiling entity g30_16_4_encoder
--- Compiling architecture encoder of g30_16_4_encoder
 
 } {} {}} {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd} {1 {vcom -work work -2002 -explicit -stats=none {Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd}
 Model Technology ModelSim ALTERA vcom 10.4d Compiler 2015.12 Dec 30 2015

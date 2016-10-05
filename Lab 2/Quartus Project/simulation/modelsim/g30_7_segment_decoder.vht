@@ -42,20 +42,20 @@ END g30_7_segment_decoder_vhd_tst;
 ARCHITECTURE g30_7_segment_decoder_arch OF g30_7_segment_decoder_vhd_tst IS
 -- constants                                                 
 -- signals                                                   
-SIGNAL asci_code : STD_LOGIC_VECTOR(6 DOWNTO 0);
-SIGNAL segments : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL ASCII_CODE : STD_LOGIC_VECTOR(6 DOWNTO 0);
+SIGNAL SEGMENTS : STD_LOGIC_VECTOR(6 DOWNTO 0);
 COMPONENT g30_7_segment_decoder
 	PORT (
-	asci_code : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
-	segments : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+	ASCII_CODE : IN STD_LOGIC_VECTOR(6 DOWNTO 0);
+	SEGMENTS : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
 	);
 END COMPONENT;
 BEGIN
 	i1 : g30_7_segment_decoder
 	PORT MAP (
 -- list connections between master ports and signals
-	asci_code => asci_code,
-	segments => segments
+	ASCII_CODE => ASCII_CODE,
+	SEGMENTS => SEGMENTS
 	);
 init : PROCESS                                               
 -- variable declarations                                     
@@ -69,11 +69,11 @@ always : PROCESS
 -- variable declarations                                      
 BEGIN                
 		
-		asci_code <= "0000000"; -- first value of input code
+		ASCII_CODE <= "0000000"; -- first value of input code
 		wait for 10 ns;
 		
 		for i in 0 to 127 loop  -- loop through all possibilities at least once (since input has 7 bits, there are 128 possibilities)
-			asci_code <= std_logic_vector(unsigned(asci_code) + 1); -- increment signal by one each time.
+			ASCII_CODE <= std_logic_vector(unsigned(ASCII_CODE) + 1); -- increment signal by one each time.
 			wait for 10 ns;     
 		end loop;                                         
         -- code executes for every event on sensitivity list  

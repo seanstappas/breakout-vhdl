@@ -23,35 +23,35 @@ architecture encoder of g30_64_6_encoder is
 	signal ALL_ERRORS: std_logic_vector(3 downto 0);
 	component g30_16_4_encoder 
 		port (
-			INPUTS_16 : in std_logic_vector(15 downto 0);
-			ERROR_16 : out std_logic;
-			CODE_16 : out std_logic_vector(3 downto 0)
+			INPUTS : in std_logic_vector(15 downto 0);
+			ERROR : out std_logic;
+			CODE : out std_logic_vector(3 downto 0)
 		);
 	end component;
 begin
 	Encoder3 : g30_16_4_encoder
 		port map(
-			INPUTS_16 => INPUTS(63 downto 48),
-			ERROR_16 => ALL_ERRORS(3),
-			CODE_16 => ALL_CODES(15 downto 12)
+			INPUTS => INPUTS(63 downto 48),
+			ERROR => ALL_ERRORS(3),
+			CODE => ALL_CODES(15 downto 12)
 		);
 	Encoder2 : g30_16_4_encoder
 		port map(
-			INPUTS_16 => INPUTS(47 downto 32),
-			ERROR_16 => ALL_ERRORS(2),
-			CODE_16 => ALL_CODES(11 downto 8)
+			INPUTS => INPUTS(47 downto 32),
+			ERROR => ALL_ERRORS(2),
+			CODE => ALL_CODES(11 downto 8)
 		);
 	Encoder1 : g30_16_4_encoder
 		port map(
-			INPUTS_16 => INPUTS(31 downto 16),
-			ERROR_16 => ALL_ERRORS(1),
-			CODE_16 => ALL_CODES(7 downto 4)
+			INPUTS => INPUTS(31 downto 16),
+			ERROR => ALL_ERRORS(1),
+			CODE => ALL_CODES(7 downto 4)
 		);
 	Encoder0 : g30_16_4_encoder
 		port map(
-			INPUTS_16 => INPUTS(15 downto 0),
-			ERROR_16 => ALL_ERRORS(0),
-			CODE_16 => ALL_CODES(3 downto 0)
+			INPUTS => INPUTS(15 downto 0),
+			ERROR => ALL_ERRORS(0),
+			CODE => ALL_CODES(3 downto 0)
 		);
 		
 	CODE <= 
