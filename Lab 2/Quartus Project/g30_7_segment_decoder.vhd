@@ -22,7 +22,8 @@ end g30_7_segment_decoder;
 architecture segment_decoder of g30_7_segment_decoder is
 
 begin
-with ASCII_CODE select SEGMENTS <=
+with ASCII_CODE select
+SEGMENTS <=
 	"1000000" when "0110000",-- 0
 	"1111001" when "0110001",-- 1
 	"0100100" when "0110010",-- 2

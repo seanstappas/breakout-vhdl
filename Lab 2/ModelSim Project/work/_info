@@ -21,9 +21,9 @@ Vj2TKTcCoG9iQ_^d][K>L^2
 !s100 DcQObRF2k;oO];bVObKj;3
 Z6 OV;C;10.4d;61
 32
-Z7 !s110 1475686909
+Z7 !s110 1475776743
 !i10b 1
-Z8 !s108 1475686908.000000
+Z8 !s108 1475776743.000000
 Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd|
 Z10 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_16_4_encoder.vhd|
 !i113 1
@@ -62,9 +62,9 @@ R6
 32
 R7
 !i10b 1
-Z16 !s108 1475686909.000000
-Z17 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd|
-Z18 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd|
+R8
+Z16 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd|
+Z17 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_64_6_encoder.vhd|
 !i113 1
 R11
 R12
@@ -80,19 +80,19 @@ R6
 32
 R7
 !i10b 1
+R8
 R16
 R17
-R18
 !i113 1
 R11
 R12
 Eg30_64_6_encoder_vhd_tst
-Z19 w1475677696
+Z18 w1475677696
 R1
 R2
 R3
-Z20 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht
-Z21 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht
+Z19 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht
+Z20 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht
 l0
 L12
 V9n1S]HUSL=0JWJG3F_jBU0
@@ -101,9 +101,9 @@ R6
 32
 R7
 !i10b 1
-R16
-Z22 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht|
-Z23 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht|
+R8
+Z21 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht|
+Z22 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_64_6_encoder.vht|
 !i113 1
 R11
 R12
@@ -119,30 +119,30 @@ R6
 32
 R7
 !i10b 1
-R16
+R8
+R21
 R22
-R23
 !i113 1
 R11
 R12
 Eg30_7_segment_decoder
-Z24 w1475686903
+Z23 w1475706944
 R1
 R2
 R3
-Z25 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd
-Z26 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd
+Z24 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd
+Z25 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd
 l0
 L16
 VGem@<FUBFfV4__i^AG?1m3
 !s100 QfZ63N;`LJAGn^4QDY@3B2
 R6
 32
-Z27 !s110 1475686910
+Z26 !s110 1475776744
 !i10b 1
-Z28 !s108 1475686910.000000
-Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd|
-Z30 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd|
+Z27 !s108 1475776744.000000
+Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd|
+Z29 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_7_segment_decoder.vhd|
 !i113 1
 R11
 R12
@@ -152,42 +152,42 @@ R2
 DEx4 work 21 g30_7_segment_decoder 0 22 Gem@<FUBFfV4__i^AG?1m3
 l24
 L22
-VDlbGT1_N>cJ9N>M^Z4klG0
-!s100 UWG>no5K;<_H;gT7:kW?c3
+VK?PP1DL=aF?]_G@nVV;7R2
+!s100 M>J4oXK?7jAcTk;9[_VzY3
 R6
 32
-R27
+R26
 !i10b 1
+R27
 R28
 R29
-R30
 !i113 1
 R11
 R12
 Eg30_7_segment_decoder_vhd_tst
-Z31 w1475686902
-Z32 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z30 w1475686902
+Z31 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
 R1
 R2
 R3
-Z33 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht
-Z34 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht
+Z32 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht
+Z33 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht
 l0
 L40
 V;F4^Ra8V:5BJ=W@W7lYX=3
 !s100 YAj0EIAMHdD0_Zi[1_o7j1
 R6
 32
-R27
+R26
 !i10b 1
-R28
-Z35 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht|
-Z36 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht|
+R27
+Z34 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht|
+Z35 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_7_segment_decoder.vht|
 !i113 1
 R11
 R12
 Ag30_7_segment_decoder_arch
-R32
+R31
 R1
 R2
 DEx4 work 29 g30_7_segment_decoder_vhd_tst 0 22 ;F4^Ra8V:5BJ=W@W7lYX=3
@@ -197,32 +197,32 @@ V6cgHQS_`jeNQHGHI[64^=1
 !s100 DRVzGf?fgOm]YgS69jbZz0
 R6
 32
-R27
+R26
 !i10b 1
-R28
+R27
+R34
 R35
-R36
 !i113 1
 R11
 R12
 Eg30_keyboard_encoder
-Z37 w1475517572
+Z36 w1475517572
 R1
 R2
 R3
-Z38 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd
-Z39 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd
+Z37 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd
+Z38 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd
 l0
 L12
 VO<[K]IIB]FeCe99d;]zoa3
 !s100 m_OnnRAdF1<lgoe78CXUm1
 R6
 32
-R27
+R26
 !i10b 1
-R16
-Z40 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd|
-Z41 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd|
+R27
+Z39 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd|
+Z40 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_encoder.vhd|
 !i113 1
 R11
 R12
@@ -236,32 +236,32 @@ V9Mma]WJ47hJ3AnM5h4Dh80
 !s100 d4e8CL:YaOVz@^WzB=I9b0
 R6
 32
-R27
+R26
 !i10b 1
-R16
+R27
+R39
 R40
-R41
 !i113 1
 R11
 R12
 Eg30_keyboard_encoder_vhd_tst
-Z42 w1475517682
+Z41 w1475517682
 R1
 R2
 R3
-Z43 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht
-Z44 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht
+Z42 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht
+Z43 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht
 l0
 L12
 VT:ji[TUm4oDX58fm:QM:82
 !s100 [lS;hQ5Y^faNJT3TOY0`H2
 R6
 32
-R7
+R26
 !i10b 1
-R16
-Z45 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht|
-Z46 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht|
+R8
+Z44 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht|
+Z45 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_encoder.vht|
 !i113 1
 R11
 R12
@@ -275,30 +275,30 @@ V<OO0JEh]Q]KSO_UHfY?G?2
 !s100 VJQ[G6]nkWkDJOIVR49YJ1
 R6
 32
-R7
+R26
 !i10b 1
-R16
+R8
+R44
 R45
-R46
 !i113 1
 R11
 R12
 Eg30_keyboard_to_led
-Z47 w1475686539
+Z46 w1475775742
 R1
 R2
 R3
-Z48 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd
-Z49 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd
+Z47 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd
+Z48 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd
 l0
 L5
-VjT_n6G95UGYl46<1V54kO1
-!s100 SoDU[mFUgV8j1Zlch=hY11
+V7on`BjzAooJ<kY=3;n41z1
+!s100 D;VBC8Bkb]R2Rk=dk?mdf3
 R6
 32
-R27
+Z49 !s110 1475776745
 !i10b 1
-R28
+R27
 Z50 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd|
 Z51 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/g30_keyboard_to_LED.vhd|
 !i113 1
@@ -307,18 +307,59 @@ R12
 Aarch
 R1
 R2
-Z52 DEx4 work 19 g30_keyboard_to_led 0 22 jT_n6G95UGYl46<1V54kO1
+DEx4 work 19 g30_keyboard_to_led 0 22 jT_n6G95UGYl46<1V54kO1
 l30
 L12
-Z53 VbHCV_9o6>ZBdNCPg0`m6a3
-Z54 !s100 75]^;MJKfX[Z[ociWn]Wj3
+VRhjNYPGBOK>Y9k=_;Q3Ee1
+!s100 KmCibZ]L8=a2aL?gbfdBj2
 R6
 32
-R27
+Z52 !s110 1475705748
 !i10b 1
-R28
+!s108 1475705747.000000
 R50
 R51
+!i113 1
+R11
+R12
+Eg30_keyboard_to_led_vhd_tst
+Z53 w1475705581
+R31
+R1
+R2
+R3
+Z54 8Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_to_led.vht
+Z55 FY:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_to_led.vht
+l0
+L40
+ViCDhzo4YTG1LW94iKez=03
+!s100 DV9lR1@_UD6kVilZl8OFz0
+R6
+32
+R49
+!i10b 1
+Z56 !s108 1475776745.000000
+Z57 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_to_led.vht|
+Z58 !s107 Y:/OneDrive - McGill University/McGill/Semesters/Fall 2016/ECSE-323 Digital Systems Design/Labs/Lab 2/Quartus Project/simulation/modelsim/g30_keyboard_to_led.vht|
+!i113 1
+R11
+R12
+Ag30_keyboard_to_led_arch
+R31
+R1
+R2
+Z59 DEx4 work 27 g30_keyboard_to_led_vhd_tst 0 22 iCDhzo4YTG1LW94iKez=03
+l53
+L42
+Z60 VECab[[Wn1_:0WU`BR0]hF3
+Z61 !s100 @1JDjCRMjjX5gGVf>_lGY2
+R6
+32
+R49
+!i10b 1
+R56
+R57
+R58
 !i113 1
 R11
 R12
