@@ -1,13 +1,26 @@
+------------------------------------------------------------------------------------------
+--
 -- 16-4 Encoder
 --
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
 -- ECSE 323: Lab 1, Group 30
--- Authors: Gabriel Chootong, Sean Stappas
 -- September 26, 2016
 --
--- The purpose of this component is to output the index of the least significant bit that is set to "1" of a 16-bit signal.
+-- The purpose of this component is to output the index of the least significant bit that is set to '1' of a 16-bit signal.
 -- This component has two output signals, a 4-bit signal called "CODE" and a 1-bit signal called "ERROR".
 -- The index will be represented by the "CODE" signal.
--- Moreover, if all the 16 bits are set to "0", the "ERROR" signal is set to "1".
+-- Moreover, if all the 16 bits are set to '0', the "ERROR" signal is set to '1'.
+--
+--  The input ports of the module are as follows:
+--        BLOCK_COL   - 16 bits : the binary number to be encoded
+--  The output ports of the module are as follows:
+--        ERROR       - 1  bit  : an error bit to signal invalid input
+--        CODE        - 4  bits : the binary representation of the index of the least significant '1' in BLOCK_COL
+--
+-- Authors: Gabriel Chootong, Sean Stappas
 
 
 LIBRARY ieee;
@@ -44,8 +57,11 @@ begin
 		 "01101" when BLOCK_COL(13) = '1' else
 		 "01110" when BLOCK_COL(14) = '1' else
 		 "01111" when BLOCK_COL(15) = '1' else
-		 "10000";	-- our design choice to output "0000" for the code signal when the "ERROR" signal must be set to "1".
+		 "10000";	-- Our design choice to output "0000" for the code signal when the "ERROR" signal must be set to '1'.
 	CODE  <= C(3 downto 0);
 	ERROR <= C(4);
 
 end implementation1;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  September 26, 2016

@@ -1,3 +1,26 @@
+------------------------------------------------------------------------------------------
+--
+-- Keyboard Encoder
+--
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
+-- ECSE 323: Lab 2, Group 30
+-- October 3, 2016
+--
+-- The purpose of this component is to output the 7-bit ASCII code value (ASCII_CODE) associated with certain keyboard keys pressed,
+-- represented by the KEYS input port. The mapping we chose was such that the first key has ASCII value 20, increasing until 5F.
+-- If multiple keys are pressed simulaneously, the ASCII code of the least significant '1' key will be output.
+-- If no keys are pressed, the output will have value 0 (error case).
+--
+-- Input ports:
+--        KEYS       - 64 bits : the binary number representing keyboard keys (bit i is HIGH = KEY i is pressed)
+-- Output ports:
+--        ASCII_CODE - 7  bits : the ASCII code
+--
+-- Authors: Gabriel Chootong, Sean Stappas
+
 --
 -- entity name: g30_keyboard_encoder
 --
@@ -104,3 +127,6 @@ begin
 		"1011111" when "0111111",
 		"0000000" when others;
 end keyboard_encoder;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  October 3, 2016

@@ -1,11 +1,18 @@
+------------------------------------------------------------------------------------------
+--
 -- Testbench of the 16-4 Encoder
 --
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
 -- ECSE 323: Lab 1, Group 30
--- Authors: Gabriel Chootong, Sean Stappas
 -- September 26, 2016
 --
 -- Tests the 16-4 Encoder by testing 'valid' input, the error condition, and some arbitrary input.
 -- All the relevant code can be found in the 'always' process.
+--
+-- Authors: Gabriel Chootong, Sean Stappas
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
@@ -61,3 +68,6 @@ BEGIN
 		wait;
 	END PROCESS always;
 END g30_16_4_Encoder_arch;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  September 26, 2016
