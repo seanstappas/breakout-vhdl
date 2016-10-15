@@ -1,5 +1,27 @@
--- Sean Stappas, Gabriel Chootong
--- Group 30
+------------------------------------------------------------------------------------------
+--
+-- 16-4 Encoder
+--
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
+-- ECSE 323: Lab 1, Group 30
+-- September 26, 2016
+--
+-- The purpose of this component is to output the index of the least significant bit that is set to '1' of a 16-bit signal.
+-- This component has two output signals, a 4-bit signal called "CODE" and a 1-bit signal called "ERROR".
+-- The index will be represented by the "CODE" signal.
+-- Moreover, if all the 16 bits are set to '0', the "ERROR" signal is set to '1'.
+--
+-- The input ports of the module are as follows:
+--        INPUTS - 16 bits : the binary number to be encoded
+-- The output ports of the module are as follows:
+--        ERROR  - 1  bit  : an error bit to signal invalid input
+--        CODE   - 4  bits : the binary representation of the index of the least significant '1' in INPUTS
+--
+-- Authors: Gabriel Chootong, Sean Stappas
+
 library ieee;
 
 use ieee.std_logic_1164.all;
@@ -32,9 +54,12 @@ begin
 	"01101" when INPUTS(13) = '1' else
 	"01110" when INPUTS(14) = '1' else
 	"01111" when INPUTS(15) = '1' else
-	"10000";
+	"10000"; -- Our design choice to output "0000" for the code signal when the "ERROR" signal must be set to '1'.
 	
 	ERROR <= ERROR_AND_CODE(4);
 	CODE <= ERROR_AND_CODE(3 downto 0);
 	
 end encoder;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  September 26, 2016

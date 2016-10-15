@@ -21,14 +21,6 @@
 --
 -- Authors: Gabriel Chootong, Sean Stappas
 
---
--- entity name: g30_keyboard_encoder
---
--- Copyright (C) 2016 Sean Stappas, Gabriel Chootong
--- Version 1.0
--- Author: Sean Stappas, Gabriel Chootong
--- Date: October 3, 2016
-
 library ieee;
 use ieee.std_logic_1164.all;
 

@@ -1,10 +1,26 @@
+------------------------------------------------------------------------------------------
 --
--- entity name: g30_64_6_encoder
+-- 64-6 Encoder
 --
--- Copyright (C) 2016 Sean Stappas, Gabriel Chootong
--- Version 1.0
--- Authors: Sean Stappas, Gabriel Chootong
--- Date: October 3, 2016
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
+-- ECSE 323: Lab 2, Group 30
+-- October 3, 2016
+--
+-- The purpose of this component is to output the index of the least significant bit that is set to '1' of a 64-bit signal.
+-- This component has two output signals, a 4-bit signal called "CODE" and a 1-bit signal called "ERROR".
+-- The index will be represented by the "CODE" signal. Moreover, if all the 16 bits are set to '0', the "ERROR" signal is set to '1'.
+-- The component makes use of four 16-4 encoders from Lab 1.
+--
+-- Input ports:
+--        INPUTS - 64 bits : the binary number to be encoded
+-- Output ports:
+--        ERROR  - 1  bit  : an error bit to signal invalid input
+--        CODE   - 6  bits : the binary representation of the index of the least significant '1' in INPUTS
+--
+-- Authors: Gabriel Chootong, Sean Stappas
 
 library ieee;
 
@@ -65,3 +81,6 @@ begin
 		'1' when ALL_ERRORS = "1111" else
 	 	'0';
 end encoder;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  October 3, 2016
