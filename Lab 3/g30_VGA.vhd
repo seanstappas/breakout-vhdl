@@ -63,7 +63,7 @@ begin
 
 	horizontal_value <= to_integer(unsigned(horizontal_count));
 	COLUMN <=
-		"1100011111" when (horizontal_value > 975) or (horizontal_value < 176) else -- 875 or 975?
+		"1100011111" when (horizontal_value > 975) or (horizontal_value < 176) else
 		to_unsigned(horizontal_value - 176, COLUMN'length);
 
 	-- Assign BLANKING, HSYNC and VSYNC
