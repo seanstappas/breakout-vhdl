@@ -59,12 +59,12 @@ begin
 	vertical_value <= to_integer(unsigned(vertical_count));
 	ROW <=
 		"1001010111" when (vertical_value > 642) or (vertical_value < 43) else 
-		std_logic_vector(to_unsigned(vertical_value - 43, ROW'length));
+		to_unsigned(vertical_value - 43, ROW'length);
 
 	horizontal_value <= to_integer(unsigned(horizontal_count));
 	COLUMN <=
 		"1100011111" when (horizontal_value > 975) or (horizontal_value < 176) else -- 875 or 975?
-		std_logic_vector(to_unsigned(horizontal_value - 176, COLUMN'length));
+		to_unsigned(horizontal_value - 176, COLUMN'length);
 
 	-- Assign BLANKING, HSYNC and VSYNC
 	BLANKING <=
