@@ -39,17 +39,17 @@ begin
 	-- Setup counters
 	horizontal_counter : lpm_counter
 		generic map(LPM_WIDTH => horizontal_count'length)
-		port map(clock => clock, sclr => horizontal_clear, q => horizontal_count);
+		port map(clock => clock, sclr => horizontal_clear, q => horizontal_count, aclr => rst);
 		
 	vertical_counter : lpm_counter
 		generic map(LPM_WIDTH => vertical_count'length)
-		port map(clock => clock, sclr => vertical_clear, q => vertical_count, cnt_en => vertical_enable);
+		port map(clock => clock, sclr => vertical_clear, q => vertical_count, cnt_en => vertical_enable, aclr => rst);
 
 	horizontal_clear <=
-		'1' when (horizontal_count = "10000001111" or rst = '1') else -- Counts up to 1039
+		'1' when (horizontal_count = "10000001111") else -- Counts up to 1039
 		'0';
 	vertical_clear  <=
-		'1' when (vertical_count = "1010011001" or rst = '1') else -- Counts up to 665
+		'1' when (vertical_count = "1010011001") else -- Counts up to 665
 		'0';
 	vertical_enable <=
 		'1' when horizontal_count = "10000001111" else -- Enabled when horizontal counter reaches maximum value (1039)
@@ -68,8 +68,8 @@ begin
 
 	-- Assign BLANKING, HSYNC and VSYNC
 	BLANKING <=
-		'1' when (vertical_value > 642) or (vertical_value < 43) or (horizontal_value > 975) or (horizontal_value < 176) else  -- Off-screen limits
-		'0';
+		'0' when (vertical_value > 642) or (vertical_value < 43) or (horizontal_value > 975) or (horizontal_value < 176) else  -- Off-screen limits
+		'1';
 	HSYNC <=
 		'0' when (horizontal_value < 120) else
 		'1';
