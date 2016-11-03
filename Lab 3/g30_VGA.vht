@@ -1,28 +1,17 @@
--- Copyright (C) 1991-2013 Altera Corporation
--- Your use of Altera Corporation's design tools, logic functions 
--- and other software and tools, and its AMPP partner logic 
--- functions, and any output files from any of the foregoing 
--- (including device programming or simulation files), and any 
--- associated documentation or information are expressly subject 
--- to the terms and conditions of the Altera Program License 
--- Subscription Agreement, Altera MegaCore Function License 
--- Agreement, or other applicable license agreement, including, 
--- without limitation, that your use is for the sole purpose of 
--- programming logic devices manufactured by Altera and sold by 
--- Altera or its authorized distributors.  Please refer to the 
--- applicable agreement for further details.
-
--- ***************************************************************************
--- This file contains a Vhdl test bench template that is freely editable to   
--- suit user's needs .Comments are provided in each section to help the user  
--- fill out necessary details.                                                
--- ***************************************************************************
--- Generated on "10/23/2016 22:36:49"
-
--- Vhdl Test Bench template for design  :  g30_VGA
--- 
--- Simulation tool : ModelSim (VHDL)
--- 
+------------------------------------------------------------------------------------------
+--
+-- Testbench of VGA Signal Generator
+--
+-- Copyright (C) 2016 Sean Stappas, Gabriel Chootong.
+--
+------------------------------------------------------------------------------------------
+--
+-- ECSE 323: Lab 2, Group 30
+-- October 3, 2016
+--
+-- Tests the VGA signal generator by simply connecting a 50 MHz clock to the clock input.
+--
+-- Authors: Gabriel Chootong, Sean Stappas
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
@@ -72,7 +61,11 @@ BEGIN
 	END PROCESS init;
 
 	always : PROCESS
-	-- optional sensitivity list                                  
+	-- optional sensitivity list  
+
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  October 24, 2016                                
 	-- (        )                                                 
 	-- variable declarations                                      
 	BEGIN
@@ -84,3 +77,6 @@ BEGIN
 		end loop;
 	END PROCESS always;
 END g30_VGA_arch;
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  October 3, 2016
