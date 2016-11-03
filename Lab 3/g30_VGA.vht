@@ -7,7 +7,7 @@
 ------------------------------------------------------------------------------------------
 --
 -- ECSE 323: Lab 2, Group 30
--- October 3, 2016
+-- October 24, 2016
 --
 -- Tests the VGA signal generator by simply connecting a 50 MHz clock to the clock input.
 --
@@ -79,4 +79,4 @@ BEGIN
 END g30_VGA_arch;
 ------------------------------------------------------------------------------
 -- Revision History
--- v1.0 original version  October 3, 2016
+-- v1.0 original version  October 24, 2016

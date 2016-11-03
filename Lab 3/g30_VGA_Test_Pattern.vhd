@@ -61,4 +61,8 @@ B <=
 	"0000";
 
 end test_pattern;	
+
+------------------------------------------------------------------------------
+-- Revision History
+-- v1.0 original version  October 30, 2016
 		 
