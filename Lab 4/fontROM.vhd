@@ -1,4 +1,4 @@
--- Listing 13.1
+
 -- ROM with synchonous read (inferring Block RAM)
 -- character ROM
 --   - 8-by-16 (8-by-2^4) font
@@ -6,27 +6,50 @@
 --   - ROM size: 512-by-8 (2^11-by-8) bits
 --               16K bits: 1 BRAM
 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.numeric_std.all;
+-- Original Source: https://github.com/thelonious/vga_generator/tree/master/vga_text
+-- NOTE: This is not the original. Cleaned up by MLM
 
-entity font_rom is
-   port(
-      clock: in std_logic;
-      addr: in std_logic_vector(10 downto 0);
-      data: out std_logic_vector(7 downto 0)
-   );
-end font_rom;
+-- VHDL'93 supports the full table of ISO-8859-1 characters (0x00 through 0xFF(255))
 
-architecture arch of font_rom is
-   constant ADDR_WIDTH: integer:=11;
-   constant DATA_WIDTH: integer:=8;
-   signal addr_reg: std_logic_vector(ADDR_WIDTH-1 downto 0);
-   type rom_type is array (0 to 2**ADDR_WIDTH-1)
-        of std_logic_vector(DATA_WIDTH-1 downto 0);
+-- Note that signal initial values are used to store values in the rom. Normally signal initial
+-- values are not synthesizable, but Quartus will use the signal initial values to preload a
+-- register when the FPGA configuration is done, assuming that the signal is mapped to a register output.
 
-   -- ROM definition - 2^11-by-8
-   constant ROM: rom_type := (
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+use IEEE.NUMERIC_STD.ALL;
+
+
+-- modified to make it a ROM, and to address by character code, font row and font column (JJClark Sept 2016)
+
+entity fontROM is
+	generic(
+		addrWidth: integer := 11;
+		dataWidth: integer := 8
+	);
+	port(
+		clkA: in std_logic;
+		char_code : in std_logic_vector(6 downto 0); -- 7-bit ASCII character code
+		font_row : in std_logic_vector(3 downto 0); -- 0-15 row address in single character
+		font_col : in std_logic_vector(2 downto 0); -- 0-7 column address in single character
+		font_bit : out std_logic -- pixel value at the given row and column for the selected character code
+	);
+end fontROM;
+
+architecture Behavioral of fontROM is
+   
+
+	type rom_type is array (0 to 2**addrWidth-1) of std_logic_vector(dataWidth-1 downto 0);
+	
+	signal addrA : std_logic_vector(addrWidth-1 downto 0);
+	signal dataOutA: std_logic_vector(dataWidth-1 downto 0);
+
+	-- ROM definition
+	signal ROM: rom_type := (   -- 2^11-by-8
+		-- NUL: code x00
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -43,7 +66,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x01
+		-- SOH: code x01
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111110", -- 2  ******
@@ -60,7 +83,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x02
+		-- STX: code x02
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111110", -- 2  ******
@@ -77,7 +100,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x03
+		-- ETX: code x03
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -94,7 +117,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x04
+		-- EOT: code x04
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -111,7 +134,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x05
+		-- ENQ: code x05
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -128,7 +151,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x06
+		-- ACK: code x06
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -145,7 +168,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x07
+		-- BEL: code x07
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -162,7 +185,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x08
+		-- BS: code x08
 		"11111111", -- 0 ********
 		"11111111", -- 1 ********
 		"11111111", -- 2 ********
@@ -179,7 +202,7 @@ architecture arch of font_rom is
 		"11111111", -- d ********
 		"11111111", -- e ********
 		"11111111", -- f ********
-		-- code x09
+		-- HT: code x09
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -196,7 +219,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x0a
+		-- LF: code x0a
 		"11111111", -- 0 ********
 		"11111111", -- 1 ********
 		"11111111", -- 2 ********
@@ -842,7 +865,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x30
+		-- 0: code x30
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111100", -- 2  *****
@@ -859,7 +882,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x31
+		-- 1: code x31
 		"00000000", -- 0
 		"00000000", -- 1
 		"00011000", -- 2
@@ -876,7 +899,7 @@ architecture arch of font_rom is
 		"00000000", -- d  ******
 		"00000000", -- e
 		"00000000", -- f
-		-- code x32
+		-- 2: code x32
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111100", -- 2  *****
@@ -893,7 +916,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x33
+		-- 3: code x33
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111100", -- 2  *****
@@ -910,7 +933,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x34
+		-- 4: code x34
 		"00000000", -- 0
 		"00000000", -- 1
 		"00001100", -- 2     **
@@ -1131,7 +1154,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x41
+		-- A: code x41
 		"00000000", -- 0
 		"00000000", -- 1
 		"00010000", -- 2    *
@@ -1148,7 +1171,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x42
+		-- B: code x42
 		"00000000", -- 0
 		"00000000", -- 1
 		"11111100", -- 2 ******
@@ -1165,7 +1188,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x43
+		-- C: code x43
 		"00000000", -- 0
 		"00000000", -- 1
 		"00111100", -- 2   ****
@@ -1182,7 +1205,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x44
+		-- D: code x44
 		"00000000", -- 0
 		"00000000", -- 1
 		"11111000", -- 2 *****
@@ -1250,7 +1273,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x48
+		-- H: code x48
 		"00000000", -- 0
 		"00000000", -- 1
 		"11000110", -- 2 **   **
@@ -1267,7 +1290,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x49
+		-- I: code x49
 		"00000000", -- 0
 		"00000000", -- 1
 		"00111100", -- 2   ****
@@ -1284,7 +1307,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4a
+		-- J: code x4a
 		"00000000", -- 0
 		"00000000", -- 1
 		"00011110", -- 2    ****
@@ -1301,7 +1324,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4b
+		-- K: code x4b
 		"00000000", -- 0
 		"00000000", -- 1
 		"11100110", -- 2 ***  **
@@ -1318,7 +1341,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4c
+		-- L: code x4c
 		"00000000", -- 0
 		"00000000", -- 1
 		"11110000", -- 2 ****
@@ -1335,7 +1358,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4d
+		-- M: code x4d
 		"00000000", -- 0
 		"00000000", -- 1
 		"11000011", -- 2 **    **
@@ -1352,7 +1375,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4e
+		-- N: code x4e
 		"00000000", -- 0
 		"00000000", -- 1
 		"11000110", -- 2 **   **
@@ -1369,7 +1392,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x4f
+		-- O: code x4f
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111100", -- 2  *****
@@ -1386,7 +1409,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x50
+		-- P: code x50
 		"00000000", -- 0
 		"00000000", -- 1
 		"11111100", -- 2 ******
@@ -1403,7 +1426,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x510
+		-- Q: code x510
 		"00000000", -- 0
 		"00000000", -- 1
 		"01111100", -- 2  *****
@@ -1676,7 +1699,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x61
+		-- a: code x61
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1693,7 +1716,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x62
+		-- b: code x62
 		"00000000", -- 0
 		"00000000", -- 1
 		"11100000", -- 2  ***
@@ -1710,7 +1733,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x63
+		-- c: code x63
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1727,7 +1750,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x64
+		-- d: code x64
 		"00000000", -- 0
 		"00000000", -- 1
 		"00011100", -- 2    ***
@@ -1744,7 +1767,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x65
+		-- e: code x65
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1761,7 +1784,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x66
+		-- f: code x66
 		"00000000", -- 0
 		"00000000", -- 1
 		"00111000", -- 2   ***
@@ -1778,7 +1801,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x67
+		-- g: code x67
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1795,7 +1818,7 @@ architecture arch of font_rom is
 		"11001100", -- d **  **
 		"01111000", -- e  ****
 		"00000000", -- f
-		-- code x68
+		-- h: code x68
 		"00000000", -- 0
 		"00000000", -- 1
 		"11100000", -- 2 ***
@@ -1812,7 +1835,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x69
+		-- i: code x69
 		"00000000", -- 0
 		"00000000", -- 1
 		"00011000", -- 2    **
@@ -1829,7 +1852,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x6a
+		-- j: code x6a
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000110", -- 2      **
@@ -1846,7 +1869,7 @@ architecture arch of font_rom is
 		"01100110", -- d  **  **
 		"00111100", -- e   ****
 		"00000000", -- f
-		-- code x6b
+		-- k: code x6b
 		"00000000", -- 0
 		"00000000", -- 1
 		"11100000", -- 2 ***
@@ -1863,7 +1886,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x6c
+		-- l: code x6c
 		"00000000", -- 0
 		"00000000", -- 1
 		"00111000", -- 2   ***
@@ -1880,7 +1903,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x6d
+		-- m: code x6d
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1897,7 +1920,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x6e
+		-- n: code x6e
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -1914,7 +1937,7 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000", -- f
-		-- code x6f
+		-- o: code x6f
 		"00000000", -- 0
 		"00000000", -- 1
 		"00000000", -- 2
@@ -2203,15 +2226,22 @@ architecture arch of font_rom is
 		"00000000", -- d
 		"00000000", -- e
 		"00000000"  -- f
-   );
+	);
 begin
-   -- addr register to infer block RAM
-   process(clock)
-   begin
-      if clock'event and clock = '1' then
-        addr_reg <= addr;
-      end if;
-   end process;
-   data <= ROM(to_integer(unsigned(addr_reg)));
-end arch;
 
+	addrA <= char_code & font_row;
+	
+	font_bit <= dataOutA(to_integer(unsigned(not font_col)));
+	
+	-- address register to infer block RAM
+	setRegA: process (clkA)
+	begin
+		if rising_edge(clkA) then
+		
+			-- Read from rom
+			dataOutA <= ROM(to_integer(unsigned(addrA)));
+
+		end if;
+	end process;
+	
+end Behavioral;
