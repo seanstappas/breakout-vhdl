@@ -20,8 +20,6 @@ use ieee.numeric_std.all;
 ENTITY g30_VGA_vhd_tst IS
 END g30_VGA_vhd_tst;
 ARCHITECTURE g30_VGA_arch OF g30_VGA_vhd_tst IS
-	-- constants                                                 
-	-- signals                                                   
 	SIGNAL BLANKING : STD_LOGIC;
 	SIGNAL clock    : STD_LOGIC;
 	SIGNAL COLUMN   : unsigned(9 DOWNTO 0);
@@ -43,7 +41,6 @@ ARCHITECTURE g30_VGA_arch OF g30_VGA_vhd_tst IS
 BEGIN
 	i1 : g30_VGA
 		PORT MAP(
-			-- list connections between master ports and signals
 			BLANKING => BLANKING,
 			clock    => clock,
 			COLUMN   => COLUMN,
@@ -52,22 +49,7 @@ BEGIN
 			rst      => rst,
 			VSYNC    => VSYNC
 		);
-
-	init : PROCESS
-	-- variable declarations                                     
-	BEGIN
-		-- code that executes only once                      
-		WAIT;
-	END PROCESS init;
-
 	always : PROCESS
-	-- optional sensitivity list  
-
-------------------------------------------------------------------------------
--- Revision History
--- v1.0 original version  October 24, 2016                                
-	-- (        )                                                 
-	-- variable declarations                                      
 	BEGIN
 		L1 : loop
 			clock <= '0';

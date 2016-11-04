@@ -13,64 +13,51 @@
 --
 -- Authors: Gabriel Chootong, Sean Stappas
 
-LIBRARY ieee;                                               
-USE ieee.std_logic_1164.all;                                
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
 
 ENTITY g30_VGA_Test_Pattern_vhd_tst IS
 END g30_VGA_Test_Pattern_vhd_tst;
 ARCHITECTURE g30_VGA_Test_Pattern_arch OF g30_VGA_Test_Pattern_vhd_tst IS
--- constants                                                 
--- signals                                                   
-SIGNAL B : STD_LOGIC_VECTOR(3 DOWNTO 0);
-SIGNAL clock : STD_LOGIC;
-SIGNAL G : STD_LOGIC_VECTOR(3 DOWNTO 0);
-SIGNAL HSYNC : STD_LOGIC;
-SIGNAL R : STD_LOGIC_VECTOR(3 DOWNTO 0);
-SIGNAL rst : STD_LOGIC;
-SIGNAL VSYNC : STD_LOGIC;
-COMPONENT g30_VGA_Test_Pattern
-	PORT (
-	B : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-	clock : IN STD_LOGIC;
-	G : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-	HSYNC : OUT STD_LOGIC;
-	R : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-	rst : IN STD_LOGIC;
-	VSYNC : OUT STD_LOGIC
-	);
-END COMPONENT;
+	SIGNAL B     : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL clock : STD_LOGIC;
+	SIGNAL G     : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL HSYNC : STD_LOGIC;
+	SIGNAL R     : STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SIGNAL rst   : STD_LOGIC;
+	SIGNAL VSYNC : STD_LOGIC;
+	COMPONENT g30_VGA_Test_Pattern
+		PORT(
+			B     : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+			clock : IN  STD_LOGIC;
+			G     : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+			HSYNC : OUT STD_LOGIC;
+			R     : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+			rst   : IN  STD_LOGIC;
+			VSYNC : OUT STD_LOGIC
+		);
+	END COMPONENT;
 BEGIN
 	i1 : g30_VGA_Test_Pattern
-	PORT MAP (
--- list connections between master ports and signals
-	B => B,
-	clock => clock,
-	G => G,
-	HSYNC => HSYNC,
-	R => R,
-	rst => rst,
-	VSYNC => VSYNC
-	);
-init : PROCESS                                               
--- variable declarations                                     
-BEGIN                                                        
-        -- code that executes only once                      
-WAIT;                                                       
-END PROCESS init;                                           
-always : PROCESS                                              
--- optional sensitivity list                                  
--- (        )                                                 
--- variable declarations                                      
-BEGIN                                                         
-        -- code executes for every event on sensitivity list  
-		  L1 : loop
+		PORT MAP(
+			B     => B,
+			clock => clock,
+			G     => G,
+			HSYNC => HSYNC,
+			R     => R,
+			rst   => rst,
+			VSYNC => VSYNC
+		);
+	always : PROCESS
+	BEGIN
+		L1 : loop
 			clock <= '0';
 			wait for 10 ns;
 			clock <= '1';
 			wait for 10 ns;
 		end loop;
-                                                        
-END PROCESS always;                                          
+
+	END PROCESS always;
 END g30_VGA_Test_Pattern_arch;
 
 ------------------------------------------------------------------------------
