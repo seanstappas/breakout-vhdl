@@ -153,6 +153,9 @@ begin
 			ASCII_CODE <= x"20";
 		end if;
 	end process;
+	R <= RGB(11 downto 8);
+	G <= RGB(7 downto 4);
+	B <= RGB(3 downto 0);
 end arch;
 
 ------------------------------------------------------------------------------
