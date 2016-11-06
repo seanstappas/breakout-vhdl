@@ -52,110 +52,112 @@ entity g30_Text_Generator is
 		return bcd;                     -- this produces the value that is returned by the function
 	end to_bcd;
 
-	function bcd_to_ascii(x : std_logic_vector(4 downto 0)) return std_logic_vector(6 downto 0) is
+	function bcd_to_ascii(bcd : std_logic_vector(3 downto 0)) return std_logic_vector is
 	begin
-		return std_logic_vector(("00" & unsigned(x)) + unsigned(x"30"));
-	end to_ascii;
+		return std_logic_vector(("0000" & unsigned(bcd)) + x"30");
+	end bcd_to_ascii;
 
 end g30_Text_Generator;
 
 architecture arch of g30_Text_Generator is
 	signal BCD_SCORE : std_logic_vector(19 downto 0);
-	signal ROW       : unsigned(4 downto 0);
-	signal COL       : unsigned(5 downto 0);
+	signal ROW       : integer range 0 to 18;
+	signal COL       : integer range 0 to 59;
 	signal RGB       : std_logic_vector(11 downto 0);
+	signal ASCII     : std_logic_vector(7 downto 0);
 begin
 	BCD_SCORE <= to_bcd(SCORE);
-	ROW       <= unsigned(TEXT_ROW);
-	COL       <= unsigned(TEXT_COL);
+	ROW       <= to_integer(unsigned(TEXT_ROW));
+	COL       <= to_integer(unsigned(TEXT_COL));
 	process
 	begin
 		if ROW = 18 then
 			case COL is
 				-- SCORE (RED)
 				when 0 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"53"; -- S
+					RGB   <= x"F00";
+					ASCII <= x"53";     -- S
 				when 1 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"43"; -- C
+					RGB   <= x"F00";
+					ASCII <= x"43";     -- C
 				when 2 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"4F"; -- O
+					RGB   <= x"F00";
+					ASCII <= x"4F";     -- O
 				when 3 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"52"; -- R
+					RGB   <= x"F00";
+					ASCII <= x"52";     -- R
 				when 4 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"45"; -- E
+					RGB   <= x"F00";
+					ASCII <= x"45";     -- E
 				when 5 =>
-					RGB        <= x"F00";
-					ASCII_CODE <= x"3A"; -- :
+					RGB   <= x"F00";
+					ASCII <= x"3A";     -- :
 
 				-- SCORE VALUE (WHITE)
 				when 7 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(BCD_SCORE(19 downto 16));
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii(BCD_SCORE(19 downto 16));
 				when 8 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(BCD_SCORE(15 downto 12));
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii(BCD_SCORE(15 downto 12));
 				when 9 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(BCD_SCORE(11 downto 8));
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii(BCD_SCORE(11 downto 8));
 				when 10 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(BCD_SCORE(7 downto 4));
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii(BCD_SCORE(7 downto 4));
 				when 11 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(BCD_SCORE(3 downto 0));
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii(BCD_SCORE(3 downto 0));
 
 				-- LEVEL (YELLOW)
 				when 14 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"4C"; -- L
+					RGB   <= x"FF0";
+					ASCII <= x"4C";     -- L
 				when 15 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"45"; -- E
+					RGB   <= x"FF0";
+					ASCII <= x"45";     -- E
 				when 16 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"56"; -- V
+					RGB   <= x"FF0";
+					ASCII <= x"56";     -- V
 				when 17 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"45"; -- E
+					RGB   <= x"FF0";
+					ASCII <= x"45";     -- E
 				when 18 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"4C"; -- L
+					RGB   <= x"FF0";
+					ASCII <= x"4C";     -- L
 				when 19 =>
-					RGB        <= x"FF0";
-					ASCII_CODE <= x"3A"; -- L
+					RGB   <= x"FF0";
+					ASCII <= x"3A";     -- L
 
 				-- LEVEL VALUE (WHITE)
 				when 20 =>
-					RGB        <= x"FFF";
-					ASCII_CODE <= bcd_to_ascii(LEVEL);
+					RGB   <= x"FFF";
+					ASCII <= bcd_to_ascii("0" & LEVEL);
 
 				-- LIFE COUNT (PINK)
 				when 23 to 29 =>
 					RGB <= x"F0F";
 					if unsigned(LIFE) > (29 - COL) then
-						ASCII_CODE <= x"03";
+						ASCII <= x"03";
 					else
-						ASCII_CODE <= x"20";
+						ASCII <= x"20";
 					end if;
 
 				-- BLANK SPACES
 				when others =>
-					RGB        <= x"000";
-					ASCII_CODE <= x"20";
+					RGB   <= x"000";
+					ASCII <= x"20";
 			end case;
 		else
-			RGB        <= x"000";
-			ASCII_CODE <= x"20";
+			RGB   <= x"000";
+			ASCII <= x"20";
 		end if;
 	end process;
-	R <= RGB(11 downto 8);
-	G <= RGB(7 downto 4);
-	B <= RGB(3 downto 0);
+	R          <= RGB(11 downto 8);
+	G          <= RGB(7 downto 4);
+	B          <= RGB(3 downto 0);
+	ASCII_CODE <= ASCII(6 downto 0);
 end arch;
 
 ------------------------------------------------------------------------------
