@@ -89,69 +89,78 @@ architecture test_pattern of g30_VGA_Test_Pattern is
 	signal ASCII_CODE                                           : std_logic_vector(6 downto 0);
 	signal R_Text_Generator, G_Text_Generator, B_Text_Generator : std_logic_vector(3 downto 0);
 
-	signal clear_score : std_logic;     --clears score counter
-
 	signal char_code : std_logic_vector(6 downto 0);
 	signal font_row  : std_logic_vector(3 downto 0);
 	signal font_col  : std_logic_vector(2 downto 0);
 	signal font_bit  : std_logic;
+	
+	signal counter_clock : std_logic;
+	signal score_clock_count : std_logic_vector(23 downto 0);
 -- End Lab 4 internal signal additions		 
 
 begin
 	-- SCORE counter
+	Score_clock_counter : lpm_counter
+		generic map(LPM_WIDTH => 24)
+		port map(clock => clock, q => score_clock_count);
+		
 	Score_counter : lpm_counter
 		generic map(LPM_WIDTH => 16)
-		port map(clock => clock, sclr => clear_score, q => SCORE); -- counts slowly?
-	--with SCORE select clear_score <=
-	--	'1' when "1111111111111111",
-	--	'0' when others;
+		port map(clock => counter_clock, q => SCORE);
 
 	-- Begin Lab 4 component mapping
 	VGA1 : g30_VGA port map(clock => clock, rst => rst, BLANKING => BLANKING, ROW => ROW, COLUMN => COLUMN, HSYNC => HSYNC, VSYNC => VSYNC);
 
 	TEXT_GENERATOR1 : g30_Text_Generator port map(TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, LIFE => LIFE, LEVEL => LEVEL, SCORE => SCORE, ASCII_CODE => ASCII_CODE, R => R_Text_Generator, G => G_Text_Generator, B => B_Text_Generator);
-	--assumptions: char_code = ascii code, clkA = clock signal (for all components)
+	
 	ROM1 : fontROM port map(clkA => clock, char_code => ASCII_CODE, font_row => font_row, font_col => font_col, font_bit => font_bit);
 
 	TEXT_ADDRESS_GENERATOR1 : g30_Text_Address_Generator port map(ROW => ROW, COLUMN => COLUMN, TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, FONT_ROW => font_row, FONT_COL => font_col);
 	-- End Lab 4 component mapping
-
-
+	
 	-- P1 process: if pixel bit off, use rainbow values, else use r,b,g values from text generator.
-	P1 : process(clock)
+	P2 : process(clock)
 	begin
 		if (rising_edge(clock)) then
-			if font_bit = '0' then
-				--map to rainbow values
-
-				--RED 
-				if (((COLUMN >= 0) AND (COLUMN <= 199)) OR ((COLUMN >= 400) AND (COLUMN <= 599))) then
-					R <= "1111";
-				else
-					R <= "0000";
-				end if;                 -- end if RED
-
-				-- GREEN
-				if ((COLUMN >= 0) AND (COLUMN <= 399)) then
-					G <= "1111";
-				else
-					G <= "0000";
-				end if;                 -- end if GREEN
-
-				-- BLUE
-				if (((COLUMN >= 0) AND (COLUMN <= 99)) OR ((COLUMN >= 200) AND (COLUMN <= 299)) OR ((COLUMN >= 400) AND (COLUMN <= 499)) OR ((COLUMN >= 600) AND (COLUMN <= 699))) then
-					B <= "1111";
-				else
-					B <= "0000";
-				end if;                 -- end if BLUE
-
-			-- Condition FONT_BIT = 1
+			if score_clock_count = x"FFFFFF" then
+				counter_clock <= '1';
 			else
-				--map to r,g,b signals from text generator
-				R <= R_Text_Generator;
-				G <= G_Text_Generator;
-				B <= B_Text_Generator;
-			end if;                     -- end if font_bit
+				counter_clock <= '0';
+			end if;
+			
+			if BLANKING = '1' then
+				if font_bit = '0' then
+					--map to rainbow values
+
+					--RED 
+					if (((COLUMN >= 0) AND (COLUMN <= 199)) OR ((COLUMN >= 400) AND (COLUMN <= 599))) AND TEXT_ROW /= "10010" then
+						R <= "1111";
+					else
+						R <= "0000";
+					end if;                 -- end if RED
+
+					-- GREEN
+					if (COLUMN >= 0) AND (COLUMN <= 399) AND TEXT_ROW /= "10010" then
+						G <= "1111";
+					else
+						G <= "0000";
+					end if;                 -- end if GREEN
+
+					-- BLUE
+					if (((COLUMN >= 0) AND (COLUMN <= 99)) OR ((COLUMN >= 200) AND (COLUMN <= 299)) OR ((COLUMN >= 400) AND (COLUMN <= 499)) OR ((COLUMN >= 600) AND (COLUMN <= 699))) AND TEXT_ROW /= "10010" then
+						B <= "1111";
+					else
+						B <= "0000";
+					end if;                 -- end if BLUE
+
+				-- Condition FONT_BIT = 1
+				else
+					--map to r,g,b signals from text generator
+					R <= R_Text_Generator;
+					G <= G_Text_Generator;
+					B <= B_Text_Generator;
+				end if;                     -- end if font_bit
+			end if;
 		end if;                         -- end if rising_edge(clock)
 	end process;
 

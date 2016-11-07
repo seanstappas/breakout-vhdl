@@ -69,7 +69,7 @@ begin
 	BCD_SCORE <= to_bcd(SCORE);
 	ROW       <= to_integer(unsigned(TEXT_ROW));
 	COL       <= to_integer(unsigned(TEXT_COL));
-	process
+	process (ROW, COL, RGB, ASCII, BCD_SCORE, LEVEL, LIFE)
 	begin
 		if ROW = 18 then
 			case COL is
