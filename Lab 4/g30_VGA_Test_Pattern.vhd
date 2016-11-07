@@ -98,6 +98,10 @@ architecture test_pattern of g30_VGA_Test_Pattern is
 	signal score_clock_count : std_logic_vector(23 downto 0);
 -- End Lab 4 internal signal additions		 
 
+	-- Added Registers
+	signal old_font_row  : std_logic_vector(3 downto 0);
+	signal old_font_col  : std_logic_vector(2 downto 0);
+
 begin
 	-- SCORE counter
 	Score_clock_counter : lpm_counter
@@ -113,7 +117,7 @@ begin
 
 	TEXT_GENERATOR1 : g30_Text_Generator port map(TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, LIFE => LIFE, LEVEL => LEVEL, SCORE => SCORE, ASCII_CODE => ASCII_CODE, R => R_Text_Generator, G => G_Text_Generator, B => B_Text_Generator);
 	
-	ROM1 : fontROM port map(clkA => clock, char_code => ASCII_CODE, font_row => font_row, font_col => font_col, font_bit => font_bit);
+	ROM1 : fontROM port map(clkA => clock, char_code => ASCII_CODE, font_row => old_font_row, font_col => old_font_col, font_bit => font_bit);
 
 	TEXT_ADDRESS_GENERATOR1 : g30_Text_Address_Generator port map(ROW => ROW, COLUMN => COLUMN, TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, FONT_ROW => font_row, FONT_COL => font_col);
 	-- End Lab 4 component mapping
@@ -122,6 +126,9 @@ begin
 	P2 : process(clock)
 	begin
 		if (rising_edge(clock)) then
+			old_font_row <= font_row;
+			old_font_col <= font_col;
+		
 			if score_clock_count = x"FFFFFF" then
 				counter_clock <= '1';
 			else
