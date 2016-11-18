@@ -6,8 +6,8 @@
 --
 ------------------------------------------------------------------------------------------
 --
--- ECSE 323: Lab 2, Group 30
--- October 30, 2016
+-- ECSE 323: Lab 4, Group 30
+-- November 4, 2016
 --
 -- Tests the VGA test pattern generator by simply connecting a 50 MHz clock to the clock input.
 --
@@ -84,4 +84,4 @@ END g30_Text_Address_Generator_arch;
 
 ------------------------------------------------------------------------------
 -- Revision History
--- v1.0 original version  October 30, 2016
+-- v1.0 original version  November 4, 2016

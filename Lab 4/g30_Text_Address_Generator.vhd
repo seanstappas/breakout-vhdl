@@ -6,7 +6,7 @@
 --
 ------------------------------------------------------------------------------------------
 --
--- ECSE 323: Lab 3, Group 30
+-- ECSE 323: Lab 4, Group 30
 -- November 3, 2016
 --
 -- Determines the character to be displayed (TEXT_ROW, TEXT_COL) and location of the pixel inside that character

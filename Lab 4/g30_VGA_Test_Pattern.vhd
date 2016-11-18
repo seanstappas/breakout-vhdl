@@ -6,8 +6,8 @@
 --
 ------------------------------------------------------------------------------------------
 --
--- ECSE 323: Lab 3, Group 30
--- October 30, 2016
+-- ECSE 323: Lab 4, Group 30
+-- November 7, 2016
 --
 -- Generates a VGA test pattern
 -- 
@@ -175,5 +175,5 @@ end test_pattern;
 
 ------------------------------------------------------------------------------
 -- Revision History
--- v1.0 original version  October 30, 2016
+-- v1.0 original version  November 7, 2016
 		 

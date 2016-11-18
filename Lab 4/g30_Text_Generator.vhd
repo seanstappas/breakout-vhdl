@@ -6,7 +6,7 @@
 --
 ------------------------------------------------------------------------------------------
 --
--- ECSE 323: Lab 3, Group 30
+-- ECSE 323: Lab 4, Group 30
 -- November 3, 2016
 --
 -- Produces single line of text indicating the score, level and lives, at the bottom of the screen.
