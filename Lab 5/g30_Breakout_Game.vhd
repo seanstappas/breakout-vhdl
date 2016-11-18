@@ -107,9 +107,6 @@ architecture test_pattern of g30_Breakout_Game is
 	signal RGB : std_logic_vector(11 downto 0);
 	signal ball_row : std_logic_vector(9 downto 0); -- 0 to 599
 	signal ball_col : std_logic_vector(9 downto 0); -- 0 to 799
-	
-	signal ball_row_count : std_logic_vector(9 downto 0); -- 0 to 599
-	signal ball_col_count : std_logic_vector(9 downto 0); -- 0 to 799
 
 	signal ball_row_value : unsigned(9 downto 0);
 	signal ball_col_value : unsigned(9 downto 0);
@@ -118,22 +115,43 @@ architecture test_pattern of g30_Breakout_Game is
 	signal ball_col_increment : std_logic := '1';
 	
 	signal ball_load : std_logic := '0';
-	signal ball_row_load : std_logic_vector(9 downto 0) := "0111110100"; -- 500
-	signal ball_col_load : std_logic_vector(9 downto 0) := "0110010000"; -- 400
+	signal ball_row_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(500, 10));
+	signal ball_col_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(400, 10));
 	
 	signal not_rst : std_logic;
 	
 	signal RGB_text : std_logic_vector(11 downto 0);
+	
+	signal blocks : std_logic_vector(59 downto 0) := (others => '1');
+	
+	signal not_ball_row_increment : std_logic;
+	signal not_ball_col_increment : std_logic;
+	
+	signal level_complete : boolean;
 
 begin
 	ball_row_value <= unsigned(ball_row);
 	ball_col_value <= unsigned(ball_col);
 	
 	not_rst <= not rst;
+	not_ball_row_increment <= not ball_row_increment;
+	not_ball_col_increment <= not ball_col_increment;
 	
+	level_complete <= (blocks = x"FFFFFFFFFFFFFFF");
+	
+	-- RGB values
 	RGB_text <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
+	R <= RGB(11 downto 8);
+	G <= RGB(7 downto 4);
+	B <= RGB(3 downto 0);
+	
+	-- Component Mapping
+	VGA1 : g30_VGA port map(clock => clock, rst => '0', BLANKING => BLANKING, ROW => ROW, COLUMN => COLUMN, HSYNC => HSYNC, VSYNC => VSYNC);
+	TEXT_GENERATOR1 : g30_Text_Generator port map(TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, LIFE => LIFE, LEVEL => LEVEL, SCORE => SCORE, ASCII_CODE => ASCII_CODE, R => R_Text_Generator, G => G_Text_Generator, B => B_Text_Generator);
+	ROM1 : fontROM port map(clkA => clock, char_code => ASCII_CODE, font_row => old_font_row, font_col => old_font_col, font_bit => font_bit);
+	TEXT_ADDRESS_GENERATOR1 : g30_Text_Address_Generator port map(ROW => ROW, COLUMN => COLUMN, TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, FONT_ROW => font_row, FONT_COL => font_col);
 
-	-- Counter for slow clocks
+	-- Counters
 	Slow_score_clock_counter : lpm_counter
 		generic map(LPM_WIDTH => 24)
 		port map(clock => clock, q => slow_score_clock_count);
@@ -141,37 +159,29 @@ begin
 	Slow_ball_clock_counter : lpm_counter
 		generic map(LPM_WIDTH => 16)
 		port map(clock => clock, q => slow_ball_clock_count);
-
-	-- Ball row counter
+		
 	Ball_row_counter : lpm_counter
 		generic map(LPM_WIDTH => 10)
-		port map(clock => slow_ball_clock, q => ball_row_count, updown => ball_row_increment, aload => not_rst, data => ball_row_load);
-
-	-- Ball column counter
+		port map(clock => slow_ball_clock, q => ball_row, updown => ball_row_increment, aload => not_rst, data => std_logic_vector(to_unsigned(500, 10)));
+		
 	Ball_col_counter : lpm_counter
 		generic map(LPM_WIDTH => 10)
-		port map(clock => slow_ball_clock, q => ball_col_count, updown => ball_col_increment, aload => not_rst, data => ball_col_load);
+		port map(clock => slow_ball_clock, q => ball_col, updown => ball_col_increment, aload => not_rst, data => std_logic_vector(to_unsigned(400, 10)));
 
-	-- SCORE counter
 	Score_counter : lpm_counter
 		generic map(LPM_WIDTH => 16)
 		port map(clock => slow_score_clock, q => SCORE);
 
-	-- Begin Lab 4 component mapping
-	VGA1 : g30_VGA port map(clock => clock, rst => '0', BLANKING => BLANKING, ROW => ROW, COLUMN => COLUMN, HSYNC => HSYNC, VSYNC => VSYNC);
-
-	TEXT_GENERATOR1 : g30_Text_Generator port map(TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, LIFE => LIFE, LEVEL => LEVEL, SCORE => SCORE, ASCII_CODE => ASCII_CODE, R => R_Text_Generator, G => G_Text_Generator, B => B_Text_Generator);
-	
-	ROM1 : fontROM port map(clkA => clock, char_code => ASCII_CODE, font_row => old_font_row, font_col => old_font_col, font_bit => font_bit);
-
-	TEXT_ADDRESS_GENERATOR1 : g30_Text_Address_Generator port map(ROW => ROW, COLUMN => COLUMN, TEXT_ROW => TEXT_ROW, TEXT_COL => TEXT_COL, FONT_ROW => font_row, FONT_COL => font_col);
-
 	P2 : process(clock)
+		variable block_count : integer;
+		variable block_ball_count : integer;
 	begin
 		if (rising_edge(clock)) then
+			-- Font registers
 			old_font_row <= font_row;
 			old_font_col <= font_col;
 		
+			-- Slow clocks
 			if slow_score_clock_count = x"FFFFFF" then
 				slow_score_clock <= '1';
 			else
@@ -184,16 +194,14 @@ begin
 				slow_ball_clock <= '0';
 			end if;
 
+			-- Reset conditions
 			if not_rst = '1' then
-				--ball_row <= std_logic_vector(to_unsigned(400, ball_row'length));
-				--ball_col <= std_logic_vector(to_unsigned(400, ball_row'length));
 				ball_row_increment <= '0';
 				ball_col_increment <= '0';
+				blocks <= (others => '1');
 			end if;
-			
-			ball_row <= ball_row_count;
-			ball_col <= ball_col_count;
 
+			-- Ball collision detection
 			if ball_col_value < 16 then -- Left wall
 				ball_col_increment <= '1';
 			elsif ball_col_value >= 784 then -- Right wall
@@ -202,16 +210,36 @@ begin
 				ball_row_increment <= '1';
 			elsif ball_row_value >= 584 then -- Bottom wall (for testing)
 				ball_row_increment <= '0';
+			elsif ball_row_value < 176 then  -- Blocks area
+				block_ball_count := to_integer(((ball_row_value - 16) / 32) * 12  + (ball_col_value - 16) / 64);
+				if blocks(block_ball_count) = '1' then -- Intact block
+					blocks(block_ball_count) <= '0';
+					if (ball_row_value - 16) mod 32 /= 0 then -- Bottom/Top of block
+						ball_row_increment <= not_ball_row_increment;
+					elsif (ball_col_value - 16) mod 64 /= 0 then -- Left/Right of block
+						ball_col_increment <= not_ball_col_increment;
+					end if;
+				end if;
 			end if;
 			
+			 -- Drawing colors
 			if BLANKING = '1' then
 				if font_bit = '0' then
 					if TEXT_ROW = "10010" then
 						RGB <= x"000";
 					elsif (COLUMN < 16 or COLUMN >= 784 or ROW < 16) then -- left, right and top walls
 						RGB <= x"0FF";
-					elsif (COLUMN >= ball_col_value and COLUMN < (ball_col_value + 8)) and (ROW >= ball_row_value and ROW < (ball_row_value + 8)) then
+					elsif (COLUMN >= ball_col_value and COLUMN < (ball_col_value + 8)) and
+				       	(ROW    >= ball_row_value and ROW    < (ball_row_value + 8)) then -- Ball coloring
 						RGB <= x"FFF";
+					elsif ROW < 176 and -- Inside block area
+					      ((ROW - 16) mod 32 /= 0 and (COLUMN - 16) mod 64 /= 0) then -- Not on border
+						block_count := to_integer(((ROW - 16) / 32) * 12  + (COLUMN - 16) / 64);
+						if blocks(block_count) = '1' then -- Not on block border
+							RGB <= x"00F";
+						else
+							RGB <= x"000";
+						end if;
 					else
 						RGB <= x"000";
 					end if;
@@ -224,9 +252,6 @@ begin
 			end if;
 		end if;
 	end process;
-	R <= RGB(11 downto 8);
-	G <= RGB(7 downto 4);
-	B <= RGB(3 downto 0);
 end test_pattern;
 
 ------------------------------------------------------------------------------
