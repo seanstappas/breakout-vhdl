@@ -124,9 +124,6 @@ architecture test_pattern of g30_Breakout_Game is
 	
 	signal blocks : std_logic_vector(59 downto 0) := (others => '1');
 	
-	signal not_ball_row_increment : std_logic;
-	signal not_ball_col_increment : std_logic;
-	
 	signal level_complete : boolean;
 
 begin
@@ -134,8 +131,6 @@ begin
 	ball_col_value <= unsigned(ball_col);
 	
 	not_rst <= not rst;
-	not_ball_row_increment <= not ball_row_increment;
-	not_ball_col_increment <= not ball_col_increment;
 	
 	level_complete <= (blocks = x"FFFFFFFFFFFFFFF");
 	
@@ -153,11 +148,11 @@ begin
 
 	-- Counters
 	Slow_score_clock_counter : lpm_counter
-		generic map(LPM_WIDTH => 24)
+		generic map(LPM_WIDTH => slow_score_clock_count'length)
 		port map(clock => clock, q => slow_score_clock_count);
 		
 	Slow_ball_clock_counter : lpm_counter
-		generic map(LPM_WIDTH => 16)
+		generic map(LPM_WIDTH => slow_ball_clock_count'length)
 		port map(clock => clock, q => slow_ball_clock_count);
 		
 	Ball_row_counter : lpm_counter
@@ -175,6 +170,8 @@ begin
 	P2 : process(clock)
 		variable block_count : integer;
 		variable block_ball_count : integer;
+		variable col_offset : unsigned(9 downto 0);
+		variable row_offset : unsigned(9 downto 0);
 	begin
 		if (rising_edge(clock)) then
 			-- Font registers
@@ -182,13 +179,13 @@ begin
 			old_font_col <= font_col;
 		
 			-- Slow clocks
-			if slow_score_clock_count = x"FFFFFF" then
+			if slow_score_clock_count = (slow_score_clock_count'range => '1') then
 				slow_score_clock <= '1';
 			else
 				slow_score_clock <= '0';
 			end if;
 		
-			if slow_ball_clock_count = x"FFFF" then
+			if slow_ball_clock_count = (slow_ball_clock_count'range => '1') then
 				slow_ball_clock <= '1';
 			else
 				slow_ball_clock <= '0';
@@ -214,10 +211,15 @@ begin
 				block_ball_count := to_integer(((ball_row_value - 16) / 32) * 12  + (ball_col_value - 16) / 64);
 				if blocks(block_ball_count) = '1' then -- Intact block
 					blocks(block_ball_count) <= '0';
-					if (ball_row_value - 16) mod 32 /= 0 then -- Bottom/Top of block
-						ball_row_increment <= not_ball_row_increment;
-					elsif (ball_col_value - 16) mod 64 /= 0 then -- Left/Right of block
-						ball_col_increment <= not_ball_col_increment;
+					row_offset := (ball_row_value - 16) mod 32;
+					col_offset := (ball_col_value - 16) mod 64;
+					
+					if row_offset < 1 or row_offset > 30 then -- Bottom/Top of block
+						ball_row_increment <= not ball_row_increment;
+					end if;
+					
+					if col_offset < 1 or col_offset > 62 then -- Left/Right of block
+						ball_col_increment <= not ball_col_increment;
 					end if;
 				end if;
 			end if;
