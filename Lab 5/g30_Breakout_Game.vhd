@@ -113,8 +113,8 @@ architecture test_pattern of g30_Breakout_Game is
 	signal ball_col_increment : std_logic := '1';
 
 	signal ball_load     : std_logic                    := '0';
-	signal ball_row_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(500, ball_row_load'length));
-	signal ball_col_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(400, ball_col_load'length));
+	signal ball_row_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(500, 10));
+	signal ball_col_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(400, 10));
 
 	signal not_rst : std_logic;
 
@@ -124,9 +124,9 @@ architecture test_pattern of g30_Breakout_Game is
 
 	signal level_complete : boolean;
 
-	signal score_bonus : unsigned(15 downto 0);
+	signal score_bonus : unsigned(15 downto 0) := to_unsigned(1,16);
 
-	signal LIFE  : std_logic_vector(2 downto 0) := std_logic_vector(to_unsigned(7, LIFE'length));
+	signal LIFE  : std_logic_vector(2 downto 0) := std_logic_vector(to_unsigned(7, 3));
 	signal LEVEL : std_logic_vector(2 downto 0);
 
 begin
@@ -201,6 +201,8 @@ begin
 				blocks             <= (others => '1');
 				LIFE               <= std_logic_vector(to_unsigned(7, LIFE'length));
 				LEVEL              <= std_logic_vector(to_unsigned(0, LEVEL'length));
+				SCORE       		 <= (others => '0');
+				score_bonus 		 <= to_unsigned(1, 16);
 			end if;
 
 			-- Ball collision detection
@@ -211,6 +213,7 @@ begin
 			elsif ball_row_value < 16 then -- Top wall
 				ball_row_increment <= '1';
 			elsif ball_row_value >= 584 then -- Bottom wall (for testing)
+				score_bonus <= to_unsigned(1, score_bonus'length);
 				ball_row_increment <= '0';
 			elsif ball_row_value < 176 then -- Blocks area
 				block_ball_count := to_integer(((ball_row_value - 16) / 32) * 12 + (ball_col_value - 16) / 64);
@@ -220,7 +223,7 @@ begin
 
 					-- Adjust score
 					SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-					score_bonus <= score_bonus * 2;
+					score_bonus <= resize(score_bonus * 2, 16);
 
 					-- Bounce ball accordingly
 					row_offset := (ball_row_value - 16) mod 32;
