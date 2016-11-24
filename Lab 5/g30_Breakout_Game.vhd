@@ -20,11 +20,14 @@ use ieee.numeric_std.all;
 use lpm.lpm_components.all;
 
 entity g30_Breakout_Game is
-	port(clock   : in  std_logic;       -- 50MHz
-		 rst     : in  std_logic;       -- reset
-		 R, G, B : out std_logic_vector(3 downto 0); -- colors
-		 HSYNC   : out std_logic;       -- horizontal sync signal
-		 VSYNC   : out std_logic);      -- vertical sync signal
+	port(clock        : in  std_logic;  -- 50MHz
+		 rst          : in  std_logic;  -- reset
+		 PADDLE_LEFT  : in  std_logic;
+		 PADDLE_RIGHT : in  std_logic;
+		 test : in  std_logic;
+		 R, G, B      : out std_logic_vector(3 downto 0); -- colors
+		 HSYNC        : out std_logic;  -- horizontal sync signal
+		 VSYNC        : out std_logic); -- vertical sync signal
 end g30_Breakout_Game;
 
 architecture test_pattern of g30_Breakout_Game is
@@ -77,65 +80,76 @@ architecture test_pattern of g30_Breakout_Game is
 			 HSYNC    : out std_logic;  -- horizontal sync signal
 			 VSYNC    : out std_logic);
 	end component;
+
+	-- Display signals
 	signal BLANKING    : std_logic;
 	signal ROW, COLUMN : unsigned(9 downto 0);
+	signal TEXT_ROW    : std_logic_vector(4 downto 0);
+	signal TEXT_COL    : std_logic_vector(5 downto 0);
+	signal ASCII_CODE  : std_logic_vector(6 downto 0);
 
-	-- Begin Lab 4 internal signal additions
-	signal TEXT_ROW                                             : std_logic_vector(4 downto 0);
-	signal TEXT_COL                                             : std_logic_vector(5 downto 0);
-	signal SCORE                                                : std_logic_vector(15 downto 0);
-	signal ASCII_CODE                                           : std_logic_vector(6 downto 0);
-	signal R_Text_Generator, G_Text_Generator, B_Text_Generator : std_logic_vector(3 downto 0);
-
-	signal char_code : std_logic_vector(6 downto 0);
-	signal font_row  : std_logic_vector(3 downto 0);
-	signal font_col  : std_logic_vector(2 downto 0);
-	signal font_bit  : std_logic;
-
-	signal slow_score_clock       : std_logic;
-	signal slow_score_clock_count : std_logic_vector(23 downto 0);
-
-	signal slow_ball_clock       : std_logic;
-	signal slow_ball_clock_count : std_logic_vector(15 downto 0);
-
-	-- Added Registers
+	-- Font control
+	signal font_row     : std_logic_vector(3 downto 0);
+	signal font_col     : std_logic_vector(2 downto 0);
+	signal font_bit     : std_logic;
 	signal old_font_row : std_logic_vector(3 downto 0);
 	signal old_font_col : std_logic_vector(2 downto 0);
 
-	signal RGB      : std_logic_vector(11 downto 0);
-	signal ball_row : std_logic_vector(9 downto 0); -- 0 to 599
-	signal ball_col : std_logic_vector(9 downto 0); -- 0 to 799
+	-- RGB signals
+	signal RGB                                                  : std_logic_vector(11 downto 0);
+	signal R_Text_Generator, G_Text_Generator, B_Text_Generator : std_logic_vector(3 downto 0);
+	signal RGB_text                                             : std_logic_vector(11 downto 0);
 
-	signal ball_row_value : unsigned(9 downto 0);
-	signal ball_col_value : unsigned(9 downto 0);
+	-- Ball
+	signal slow_ball_clock_reset : std_logic;
+	signal slow_ball_clock       : std_logic;
+	signal slow_ball_clock_count : std_logic_vector(19 downto 0);
+	signal ball_row              : std_logic_vector(9 downto 0); -- 0 to 599
+	signal ball_col              : std_logic_vector(9 downto 0); -- 0 to 799
+	signal ball_row_value        : unsigned(9 downto 0);
+	signal ball_col_value        : unsigned(9 downto 0);
+	signal ball_row_increment    : std_logic;
+	signal ball_col_increment    : std_logic;
 
-	signal ball_row_increment : std_logic := '1';
-	signal ball_col_increment : std_logic := '1';
-
-	signal ball_load     : std_logic                    := '0';
-	signal ball_row_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(500, 10));
-	signal ball_col_load : std_logic_vector(9 downto 0) := std_logic_vector(to_unsigned(400, 10));
-
-	signal not_rst : std_logic;
-
-	signal RGB_text : std_logic_vector(11 downto 0);
-
+	-- Blocks
 	signal blocks : std_logic_vector(59 downto 0) := (others => '1');
 
-	signal level_complete : boolean;
+	-- Paddle
+	signal paddle_col              : std_logic_vector(9 downto 0); -- 0 to 799
+	signal paddle_row_value        : unsigned(9 downto 0);
+	signal paddle_col_value        : unsigned(9 downto 0);
+	signal slow_paddle_clock_count : std_logic_vector(15 downto 0);
+	signal slow_paddle_clock       : std_logic;
+	signal paddle_inside_borders   : std_logic := '1';
 
-	signal score_bonus : unsigned(15 downto 0) := to_unsigned(1,16);
+	-- Score, life and level
+	signal SCORE       : std_logic_vector(15 downto 0);
+	signal score_bonus : unsigned(15 downto 0)        := to_unsigned(1, 16);
+	signal LIFE        : std_logic_vector(2 downto 0) := std_logic_vector(to_unsigned(5, 3));
+	signal LEVEL       : std_logic_vector(2 downto 0) := std_logic_vector(to_unsigned(1, 3));
 
-	signal LIFE  : std_logic_vector(2 downto 0) := std_logic_vector(to_unsigned(7, 3));
-	signal LEVEL : std_logic_vector(2 downto 0);
+	-- Control signals
+	signal start       : std_logic;
+	signal async_reset : std_logic;
+	signal paddle_ball_reset  : std_logic;
+	signal game_reset  : std_logic;
+	
+	-- Colour control
+	type std_logic_vector_array12 is array (0 to 6) of std_logic_vector(11 downto 0);
+	signal LEVEL_COLOURS : std_logic_vector_array12 := (x"00F", x"0F0", x"F00", x"F0F", x"0FF", x"FFF", x"FF0");
+	
+	-- Ball speed control
+	type std_logic_vector_array20 is array (0 to 6) of std_logic_vector(19 downto 0);
+	signal LEVEL_MAX_SLOW_CLOCK_COUNTS : std_logic_vector_array20 := (x"1FFFF", x"1FFF0", x"1FF00", x"1F000", x"10000", x"0FFF0", x"0FF00");
 
 begin
 	ball_row_value <= unsigned(ball_row);
 	ball_col_value <= unsigned(ball_col);
 
-	not_rst <= not rst;
+	paddle_row_value <= to_unsigned(552, 10);
+	paddle_col_value <= unsigned(paddle_col);
 
-	level_complete <= (blocks = x"FFFFFFFFFFFFFFF");
+	async_reset <= not rst;
 
 	-- RGB values
 	RGB_text <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
@@ -152,23 +166,47 @@ begin
 	-- Counters
 	Slow_ball_clock_counter : lpm_counter
 		generic map(LPM_WIDTH => slow_ball_clock_count'length)
-		port map(clock => clock, q => slow_ball_clock_count);
+		port map(
+			clock => clock,
+			q     => slow_ball_clock_count,
+			aclr  => slow_ball_clock_reset);
 
 	Ball_row_counter : lpm_counter
-		generic map(LPM_WIDTH => 10)
-		port map(clock => slow_ball_clock, q => ball_row, updown => ball_row_increment, aload => not_rst, data => std_logic_vector(to_unsigned(500, 10)));
+		generic map(LPM_WIDTH => ball_row'length)
+		port map(
+			cnt_en => start,
+			clock  => slow_ball_clock,
+			q      => ball_row,
+			updown => ball_row_increment,
+			aload  => async_reset or paddle_ball_reset,
+			data => std_logic_vector(to_unsigned(500, ball_row'length)));
 
 	Ball_col_counter : lpm_counter
-		generic map(LPM_WIDTH => 10)
-		port map(clock => slow_ball_clock, q => ball_col, updown => ball_col_increment, aload => not_rst, data => std_logic_vector(to_unsigned(400, 10)));
+		generic map(LPM_WIDTH => ball_col'length)
+		port map(
+			cnt_en => start,
+			clock  => slow_ball_clock,
+			q      => ball_col,
+			updown => ball_col_increment,
+			aload  => async_reset or paddle_ball_reset,
+			data => std_logic_vector(to_unsigned(392, ball_col'length)));
 
-	--Slow_score_clock_counter : lpm_counter
-	--	generic map(LPM_WIDTH => slow_score_clock_count'length)
-	--	port map(clock => clock, q => slow_score_clock_count);
+	-- Added Paddle Counter for Movement		
+	Slow_paddle_col_counter : lpm_counter
+		generic map(LPM_WIDTH => slow_paddle_clock_count'length)
+		port map(
+			cnt_en => (PADDLE_LEFT xor PADDLE_RIGHT) and paddle_inside_borders,
+			clock  => clock,
+			q      => slow_paddle_clock_count);
 
-	--Score_counter : lpm_counter
-	--	generic map(LPM_WIDTH => 16)
-	--	port map(clock => slow_score_clock, q => SCORE);
+	Paddle_col_counter : lpm_counter
+		generic map(LPM_WIDTH => paddle_col'length)
+		port map(
+			clock  => slow_paddle_clock,
+			q      => paddle_col,
+			updown => PADDLE_LEFT,
+			aload  => async_reset or paddle_ball_reset,
+			data => std_logic_vector(to_unsigned(336, paddle_col'length)));
 
 	P2 : process(clock)
 		variable block_count      : integer;
@@ -177,32 +215,74 @@ begin
 		variable row_offset       : unsigned(9 downto 0);
 	begin
 		if (rising_edge(clock)) then
+			if PADDLE_LEFT = '0' or PADDLE_RIGHT = '0' then
+				start <= '1';
+			end if;
+			
+			-- Paddle screen borders
+			if (paddle_col_value >= 655 and PADDLE_RIGHT = '0') or (paddle_col_value <= 17 and PADDLE_LEFT = '0') then
+				paddle_inside_borders <= '0';
+			else
+				paddle_inside_borders <= '1';
+			end if;
+				
+			if slow_ball_clock_reset = '1' then
+				slow_ball_clock_reset <= '0';
+			end if;
+
+			if paddle_ball_reset = '1' then
+				paddle_ball_reset <= '0';
+			end if;
+
+			if unsigned(blocks) = 0 then
+				LEVEL              <= std_logic_vector(unsigned(LEVEL) + 1);
+				paddle_ball_reset  <= '1';
+				blocks             <= (others => '1');
+				ball_row_increment <= '0';
+				ball_col_increment <= '0';
+				score_bonus        <= to_unsigned(1, score_bonus'length);
+			end if;
+
 			-- Font registers
 			old_font_row <= font_row;
 			old_font_col <= font_col;
 
-			-- Slow clocks
-			--if slow_score_clock_count = (slow_score_clock_count'range => '1') then
-			--	slow_score_clock <= '1';
-			--else
-			--	slow_score_clock <= '0';
-			--end if;
-
-			if slow_ball_clock_count = (slow_ball_clock_count'range => '1') then
+			if slow_ball_clock_count = LEVEL_MAX_SLOW_CLOCK_COUNTS(to_integer(unsigned(LEVEL)) - 1) then
 				slow_ball_clock <= '1';
+				slow_ball_clock_reset <= '1';
 			else
 				slow_ball_clock <= '0';
 			end if;
 
+			-- Continuous paddle movement
+			if slow_paddle_clock_count = (slow_paddle_clock_count'range => '1') then
+				slow_paddle_clock <= '1';
+			else
+				slow_paddle_clock <= '0';
+			end if;
+			
+			-- Testing levels
+			if start = '1' and test = '0' then
+				LEVEL              <= std_logic_vector(unsigned(LEVEL) + 1);
+				paddle_ball_reset  <= '1';
+				blocks             <= (others => '1');
+				ball_row_increment <= '0';
+				ball_col_increment <= '0';
+				score_bonus        <= to_unsigned(1, score_bonus'length);
+				start              <= '0';
+			end if;
+				
 			-- Reset conditions
-			if not_rst = '1' then
+			if async_reset = '1' or game_reset = '1' then
 				ball_row_increment <= '0';
 				ball_col_increment <= '0';
 				blocks             <= (others => '1');
-				LIFE               <= std_logic_vector(to_unsigned(7, LIFE'length));
-				LEVEL              <= std_logic_vector(to_unsigned(0, LEVEL'length));
-				SCORE       		 <= (others => '0');
-				score_bonus 		 <= to_unsigned(1, 16);
+				LIFE               <= std_logic_vector(to_unsigned(5, LIFE'length)); -- changed reset life from 7 to 5 as specified on lab
+				LEVEL              <= std_logic_vector(to_unsigned(1, LEVEL'length));
+				SCORE              <= (others => '0');
+				score_bonus        <= to_unsigned(1, 16);
+				game_reset         <= '0';
+				start              <= '0';
 			end if;
 
 			-- Ball collision detection
@@ -212,9 +292,21 @@ begin
 				ball_col_increment <= '0';
 			elsif ball_row_value < 16 then -- Top wall
 				ball_row_increment <= '1';
-			elsif ball_row_value >= 584 then -- Bottom wall (for testing)
-				score_bonus <= to_unsigned(1, score_bonus'length);
+			elsif ball_row_value >= paddle_row_value and ball_col_value >= paddle_col_value and ball_col_value < paddle_col_value + 128 then -- Paddle
 				ball_row_increment <= '0';
+				score_bonus        <= to_unsigned(1, score_bonus'length);
+			-- Losing conditions	
+			elsif ball_row_value >= 567 then
+				score_bonus        <= to_unsigned(1, score_bonus'length);
+				paddle_ball_reset  <= '1';
+				if unsigned(LIFE) = 1 then -- GAME OVER
+					game_reset <= '1';
+				else                    -- Lose a life
+					LIFE               <= std_logic_vector(unsigned(LIFE) - 1);
+					ball_row_increment <= '0';
+					ball_col_increment <= '0';
+					start              <= '0';
+				end if;
 			elsif ball_row_value < 176 then -- Blocks area
 				block_ball_count := to_integer(((ball_row_value - 16) / 32) * 12 + (ball_col_value - 16) / 64);
 				if blocks(block_ball_count) = '1' then -- Intact block
@@ -223,7 +315,7 @@ begin
 
 					-- Adjust score
 					SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-					score_bonus <= resize(score_bonus * 2, 16);
+					score_bonus <= resize(score_bonus + 1, 16);
 
 					-- Bounce ball accordingly
 					row_offset := (ball_row_value - 16) mod 32;
@@ -242,15 +334,17 @@ begin
 				if font_bit = '0' then
 					if TEXT_ROW = "10010" then
 						RGB <= x"000";
-					elsif (COLUMN < 16 or COLUMN >= 784 or ROW < 16) then -- left, right and top walls
+					elsif (COLUMN < 16 or COLUMN >= 784 or ROW < 16) then -- Left, right and top walls
 						RGB <= x"0FF";
-					elsif (COLUMN >= ball_col_value and COLUMN < (ball_col_value + 8)) and (ROW >= ball_row_value and ROW < (ball_row_value + 8)) then -- Ball coloring
+					elsif (COLUMN >= ball_col_value and COLUMN < (ball_col_value + 8)) and (ROW >= ball_row_value and ROW < (ball_row_value + 8)) then -- Ball
 						RGB <= x"FFF";
-					elsif ROW < 176 and -- Inside block area
-					((ROW - 16) mod 32 /= 0 and (COLUMN - 16) mod 64 /= 0) then -- Not on border
+					elsif (COLUMN >= paddle_col_value and COLUMN < (paddle_col_value + 128)) and (ROW >= paddle_row_value and ROW < (paddle_row_value + 16)) then -- Paddle
+						RGB <= x"FFF";
+					elsif ROW < 176 and -- Blocks
+					(ROW - 16) mod 32 /= 0 and (COLUMN - 16) mod 64 /= 0 and COLUMN /= 783 then -- Not on border
 						block_count := to_integer(((ROW - 16) / 32) * 12 + (COLUMN - 16) / 64);
 						if blocks(block_count) = '1' then -- Not on block border
-							RGB <= x"00F";
+							RGB <= LEVEL_COLOURS(to_integer(unsigned(LEVEL)) - 1);
 						else
 							RGB <= x"000";
 						end if;
