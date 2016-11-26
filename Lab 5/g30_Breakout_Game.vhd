@@ -21,11 +21,11 @@ use lpm.lpm_components.all;
 
 entity g30_Breakout_Game is
 	port(
-		 clock       : in  std_logic;   -- 50MHz
+		 clock        : in  std_logic;  -- 50MHz
 		 rst          : in  std_logic;  -- reset
 		 PADDLE_LEFT  : in  std_logic;  -- user input button to move the paddle left
 		 PADDLE_RIGHT : in  std_logic;  -- user input button to move the paddle right
-		 test         : in  std_logic;
+		 LAUNCH       : in  std_logic;
 		 R, G, B      : out std_logic_vector(3 downto 0); -- colors
 		 HSYNC        : out std_logic;  -- horizontal sync signal
 		 VSYNC        : out std_logic); -- vertical sync signal
@@ -116,17 +116,17 @@ architecture test_pattern of g30_Breakout_Game is
 	-- A '1' at the nth index of this vector indicates that the nth block is still intact. If '0',
 	-- the block is broken. The block indices follow the following pattern in 2D space:
 	--
-	-- ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
-	-- │  0 │  1 │  2 │  3 │  4 │  5 │  6 │  7 │  8 │  9 │ 10 │ 11 │
-	-- ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-	-- │ 12 │ 13 │ 14 │ 15 │ 16 │ 17 │ 18 │ 19 │ 20 │ 21 │ 22 │ 23 │
-	-- ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-	-- │ 24 │ 25 │ 26 │ 27 │ 28 │ 29 │ 30 │ 31 │ 32 │ 33 │ 34 │ 35 │
-	-- ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-	-- │ 36 │ 37 │ 38 │ 39 │ 40 │ 41 │ 42 │ 43 │ 44 │ 45 │ 46 │ 47 │
-	-- ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-	-- │ 48 │ 49 │ 50 │ 51 │ 52 │ 53 │ 54 │ 55 │ 56 │ 57 │ 58 │ 59 │
-	-- └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘ 
+	-- â”Œâ”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”
+	-- â”‚  0 â”‚  1 â”‚  2 â”‚  3 â”‚  4 â”‚  5 â”‚  6 â”‚  7 â”‚  8 â”‚  9 â”‚ 10 â”‚ 11 â”‚
+	-- â”œâ”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¤
+	-- â”‚ 12 â”‚ 13 â”‚ 14 â”‚ 15 â”‚ 16 â”‚ 17 â”‚ 18 â”‚ 19 â”‚ 20 â”‚ 21 â”‚ 22 â”‚ 23 â”‚
+	-- â”œâ”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¤
+	-- â”‚ 24 â”‚ 25 â”‚ 26 â”‚ 27 â”‚ 28 â”‚ 29 â”‚ 30 â”‚ 31 â”‚ 32 â”‚ 33 â”‚ 34 â”‚ 35 â”‚
+	-- â”œâ”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¤
+	-- â”‚ 36 â”‚ 37 â”‚ 38 â”‚ 39 â”‚ 40 â”‚ 41 â”‚ 42 â”‚ 43 â”‚ 44 â”‚ 45 â”‚ 46 â”‚ 47 â”‚
+	-- â”œâ”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¼â”€â”€â”€â”€â”¤
+	-- â”‚ 48 â”‚ 49 â”‚ 50 â”‚ 51 â”‚ 52 â”‚ 53 â”‚ 54 â”‚ 55 â”‚ 56 â”‚ 57 â”‚ 58 â”‚ 59 â”‚
+	-- â””â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”´â”€â”€â”€â”€â”˜ 
 	--
 	signal blocks : std_logic_vector(59 downto 0) := (others => '1');
 
@@ -186,22 +186,15 @@ architecture test_pattern of g30_Breakout_Game is
 		x"10000",
 		x"0FFF0",
 		x"0FF00");
+		
+	signal block_count      : integer;
+	signal block_ball_count : integer;
+	signal col_offset       : unsigned(9 downto 0);
+	signal row_offset       : unsigned(9 downto 0);
+	
+	signal block_hit : std_logic;
 
 begin
-	ball_row_value <= unsigned(ball_row);
-	ball_col_value <= unsigned(ball_col);
-
-	paddle_row_value <= to_unsigned(552, 10);
-	paddle_col_value <= unsigned(paddle_col);
-
-	async_reset <= not rst;
-
-	-- RGB values
-	RGB_text <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
-	R        <= RGB(11 downto 8);
-	G        <= RGB(7 downto 4);
-	B        <= RGB(3 downto 0);
-
 	-- Lab 4 Component Mapping
 	VGA1 : g30_VGA port map(
 			clock    => clock,
@@ -253,8 +246,8 @@ begin
 			clock  => slow_ball_clock,
 			q      => ball_row,
 			updown => ball_row_increment,
-			aload  => async_reset or paddle_ball_reset,
-			data   => std_logic_vector(to_unsigned(500, ball_row'length)));
+			aload  => async_reset or paddle_ball_reset or not start,
+			data   => std_logic_vector(paddle_row_value - 10));
 
 	Ball_col_counter : lpm_counter
 		generic map(LPM_WIDTH => ball_col'length)
@@ -263,8 +256,8 @@ begin
 			clock  => slow_ball_clock,
 			q      => ball_col,
 			updown => ball_col_increment,
-			aload  => async_reset or paddle_ball_reset,
-			data   => std_logic_vector(to_unsigned(392, ball_col'length)));
+			aload  => async_reset or paddle_ball_reset or not start,
+			data   => std_logic_vector(paddle_col_value + 60));
 
 	-- Paddle counters		
 	Slow_paddle_col_counter : lpm_counter -- "slow" counter that controls the speed of the paddle
@@ -282,17 +275,33 @@ begin
 			updown => PADDLE_LEFT,
 			aload  => async_reset or paddle_ball_reset,
 			data   => std_logic_vector(to_unsigned(336, paddle_col'length)));
+	
+	
+	ball_row_value <= unsigned(ball_row);
+	ball_col_value <= unsigned(ball_col);
+
+	paddle_row_value <= to_unsigned(552, 10);
+	paddle_col_value <= unsigned(paddle_col);
+
+	async_reset <= not rst;
+	
+	row_offset <= (ball_row_value - 16) mod 32;
+	col_offset <= (ball_col_value - 16) mod 64;
+	block_count <= to_integer(((ROW - 16) / 32) * 12 + (COLUMN - 16) / 64);
+	block_ball_count <= to_integer(((ball_row_value - 16) / 32) * 12 + (ball_col_value - 16) / 64);
+
+	-- RGB values
+	RGB_text <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
+	R        <= RGB(11 downto 8);
+	G        <= RGB(7 downto 4);
+	B        <= RGB(3 downto 0);
 
 	P2 : process(clock)
-		variable block_count      : integer;
-		variable block_ball_count : integer;
-		variable col_offset       : unsigned(9 downto 0);
-		variable row_offset       : unsigned(9 downto 0);
 	begin
 		if (rising_edge(clock)) then
 
 			-- User starts the game by moving the paddle
-			if PADDLE_LEFT = '0' or PADDLE_RIGHT = '0' then
+			if LAUNCH = '0' then
 				start <= '1';
 			end if;
 
@@ -345,12 +354,6 @@ begin
 				slow_paddle_clock <= '0';
 			end if;
 
-			-- Testing levels
-			if start = '1' and test = '0' then
-				blocks <= (others => '0');
-				start  <= '0';
-			end if;
-
 			-- Reset conditions (user-input reset, or win condition, or loss condition)
 			if async_reset = '1' or game_reset = '1' then
 				ball_row_increment <= '0';
@@ -371,8 +374,15 @@ begin
 				ball_col_increment <= '0';
 			elsif ball_row_value < 16 then -- Top wall
 				ball_row_increment <= '1';
-			elsif ball_row_value >= paddle_row_value and -- Paddle 
-			ball_col_value >= paddle_col_value and ball_col_value < paddle_col_value + 128 then
+			elsif ball_row_value = paddle_row_value and --  Paddle 
+			      ball_col_value >= paddle_col_value and 
+			      ball_col_value < paddle_col_value + 120 then -- Accounting for size of ball
+				if PADDLE_LEFT = '0' and PADDLE_RIGHT = '1' then
+					ball_col_increment <= '0';
+				elsif PADDLE_LEFT = '1' and PADDLE_RIGHT = '0' then
+					ball_col_increment <= '1'; 
+				end if;
+				
 				ball_row_increment <= '0';
 				score_bonus        <= to_unsigned(1, score_bonus'length);
 			elsif ball_row_value >= 567 then -- Bottom of screen
@@ -386,27 +396,36 @@ begin
 					start              <= '0';
 					score_bonus        <= to_unsigned(1, score_bonus'length);
 				end if;
-			elsif ball_row_value < 176 then -- Blocks area
-				block_ball_count := to_integer(
-						((ball_row_value - 16) / 32) * 12 + (ball_col_value - 16) / 64);
-				if blocks(block_ball_count) = '1' then -- Intact block
-					-- Break block
-					blocks(block_ball_count) <= '0';
-
-					-- Adjust score
-					SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-					score_bonus <= resize(score_bonus + 1, 16);
-
-					-- Bounce ball accordingly
-					row_offset := (ball_row_value - 16) mod 32;
-					col_offset := (ball_col_value - 16) mod 64;
-					if row_offset < 1 or row_offset > 30 then -- Bottom/Top of block
-						ball_row_increment <= not ball_row_increment;
-					end if;
-					if col_offset < 1 or col_offset > 62 then -- Left/Right of block
-						ball_col_increment <= not ball_col_increment;
+			elsif block_hit = '0' and ball_row_value <= 176 then -- Blocks area
+				if col_offset = 0 then
+					if ball_col_value < 784 and ball_col_increment = '1' and blocks(block_ball_count) = '1' then
+						blocks(block_ball_count) <= '0';
+						ball_col_increment <= '0';
+						block_hit <= '1';
+					elsif ball_col_value > 16 and ball_col_increment = '0' and blocks(block_ball_count - 1) = '1'  then
+						blocks(block_ball_count - 1) <= '0';
+						ball_col_increment <= '1';
+						block_hit <= '1';
 					end if;
 				end if;
+				
+				if row_offset = 0 then
+					if ball_row_value < 176 and ball_row_increment = '1' and blocks(block_ball_count) = '1' then
+						blocks(block_ball_count) <= '0';
+						ball_row_increment <= '0';
+						block_hit <= '1';
+					elsif ball_row_value > 16 and ball_row_increment = '0' and blocks(block_ball_count - 12) = '1' then
+						blocks(block_ball_count - 12) <= '0';
+						ball_row_increment <= '1';
+						block_hit <= '1';
+					end if;
+				end if;
+			end if;
+			
+			if block_hit = '1' then
+				SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
+				score_bonus <= score_bonus + 1;
+				block_hit <= '0';
 			end if;
 
 			-- Drawing colors
@@ -432,8 +451,7 @@ begin
 						  (ROW - 16) mod 32 /= 0 and -- Not on black border of the blocks
 						  (COLUMN - 16) mod 64 /= 0 and 
 						  COLUMN /= 783 then
-						block_count := to_integer(((ROW - 16) / 32) * 12 + (COLUMN - 16) / 64);
-						if blocks(block_count) = '1' then -- Not on block border
+						if blocks(block_count) = '1' then -- Intact block
 							RGB <= LEVEL_COLOURS(to_integer(unsigned(LEVEL)) - 1);
 						else
 							RGB <= x"000";
