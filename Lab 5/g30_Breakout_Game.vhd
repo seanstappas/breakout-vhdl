@@ -101,9 +101,14 @@ architecture test_pattern of g30_Breakout_Game is
 	signal RGB_text                                             : std_logic_vector(11 downto 0);
 
 	-- Ball
-	signal slow_ball_clock_reset : std_logic;
-	signal slow_ball_clock       : std_logic;
-	signal slow_ball_clock_count : std_logic_vector(19 downto 0);
+	signal slow_ball_row_clock_reset : std_logic;
+	signal slow_ball_col_clock_reset : std_logic;
+	signal slow_ball_row_clock       : std_logic;
+	signal slow_ball_col_clock       : std_logic;
+	signal slow_ball_row_clock_count : std_logic_vector(19 downto 0);
+	signal slow_ball_col_clock_count : std_logic_vector(19 downto 0);
+	signal max_slow_ball_row_clock_count : std_logic_vector(19 downto 0);
+	signal max_slow_ball_col_clock_count : std_logic_vector(19 downto 0);
 	signal ball_row              : std_logic_vector(9 downto 0);
 	signal ball_col              : std_logic_vector(9 downto 0);
 	signal ball_row_value        : unsigned(9 downto 0);
@@ -126,7 +131,7 @@ architecture test_pattern of g30_Breakout_Game is
 	-- │ 36 │ 37 │ 38 │ 39 │ 40 │ 41 │ 42 │ 43 │ 44 │ 45 │ 46 │ 47 │
 	-- ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
 	-- │ 48 │ 49 │ 50 │ 51 │ 52 │ 53 │ 54 │ 55 │ 56 │ 57 │ 58 │ 59 │
-	-- └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘ 
+	-- └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
 	--
 	signal blocks : std_logic_vector(59 downto 0) := (others => '1');
 
@@ -156,7 +161,7 @@ architecture test_pattern of g30_Breakout_Game is
 	-- Every element in the following array indicates the RGB color of the blocks at the associated
 	-- level. For example, level 1 has color "00F" (blue), level 2 has "0F0" (green)
 	--
-	type std_logic_vector_array12 is array (0 to 6) of std_logic_vector(11 downto 0);
+	type std_logic_vector_array12 is array (0 to 8) of std_logic_vector(11 downto 0);
 	signal LEVEL_COLOURS : std_logic_vector_array12 := (
 		x"00F",
 		x"0F0",
@@ -164,7 +169,9 @@ architecture test_pattern of g30_Breakout_Game is
 		x"F0F",
 		x"0FF",
 		x"FFF",
-		x"FF0");
+		x"FF0",
+		x"FFF",
+		x"FFF");
 
 	-- Ball speed control
 	--
@@ -177,13 +184,15 @@ architecture test_pattern of g30_Breakout_Game is
 	-- Therefore, at every level, the ball will move faster, making the game get progressively
 	-- harder.
 	-- 
-	type std_logic_vector_array20 is array (0 to 6) of std_logic_vector(19 downto 0);
+	type std_logic_vector_array20 is array (0 to 8) of std_logic_vector(19 downto 0);
 	signal MAX_BALL_CLOCK_COUNTS : std_logic_vector_array20 := (
 		x"1FFFF",
 		x"1FFF0",
 		x"1FF00",
 		x"1F000",
 		x"10000",
+		x"0FFF0",
+		x"0FFF0",
 		x"0FFF0",
 		x"0FF00");
 		
@@ -192,7 +201,10 @@ architecture test_pattern of g30_Breakout_Game is
 	signal col_offset       : unsigned(9 downto 0);
 	signal row_offset       : unsigned(9 downto 0);
 	
-	signal block_hit : std_logic;
+	signal last_ball_col : unsigned(9 downto 0);
+	signal last_ball_row : unsigned(9 downto 0);
+	
+	signal row_col_clock_diff : integer;
 
 begin
 	-- Lab 4 Component Mapping
@@ -232,18 +244,25 @@ begin
 			FONT_COL => font_col);
 
 	-- Ball counters
-	Slow_ball_clock_counter : lpm_counter -- "slow" counter that controls the speed of the ball
-		generic map(LPM_WIDTH => slow_ball_clock_count'length)
+	Slow_ball_row_counter : lpm_counter -- "slow" counter that controls the speed of the ball
+		generic map(LPM_WIDTH => slow_ball_row_clock_count'length)
 		port map(
 			clock => clock,
-			q     => slow_ball_clock_count,
-			aclr  => slow_ball_clock_reset);
+			q     => slow_ball_row_clock_count,
+			aclr  => slow_ball_row_clock_reset);
+			
+	Slow_ball_col_counter : lpm_counter -- "slow" counter that controls the speed of the ball
+		generic map(LPM_WIDTH => slow_ball_col_clock_count'length)
+		port map(
+			clock => clock,
+			q     => slow_ball_col_clock_count,
+			aclr  => slow_ball_col_clock_reset);
 
 	Ball_row_counter : lpm_counter
 		generic map(LPM_WIDTH => ball_row'length)
 		port map(
 			cnt_en => start,
-			clock  => slow_ball_clock,
+			clock  => slow_ball_row_clock,
 			q      => ball_row,
 			updown => ball_row_increment,
 			aload  => async_reset or paddle_ball_reset or not start,
@@ -253,7 +272,7 @@ begin
 		generic map(LPM_WIDTH => ball_col'length)
 		port map(
 			cnt_en => start,
-			clock  => slow_ball_clock,
+			clock  => slow_ball_col_clock,
 			q      => ball_col,
 			updown => ball_col_increment,
 			aload  => async_reset or paddle_ball_reset or not start,
@@ -279,6 +298,9 @@ begin
 	
 	ball_row_value <= unsigned(ball_row);
 	ball_col_value <= unsigned(ball_col);
+
+	max_slow_ball_row_clock_count <= MAX_BALL_CLOCK_COUNTS(to_integer(unsigned(LEVEL)) - 1);
+	max_slow_ball_col_clock_count <= std_logic_vector(signed(max_slow_ball_row_clock_count) + row_col_clock_diff);
 
 	paddle_row_value <= to_unsigned(552, 10);
 	paddle_col_value <= unsigned(paddle_col);
@@ -313,9 +335,12 @@ begin
 				paddle_inside_borders <= '1';
 			end if;
 
-			-- This is to prevent the system from staying in an state infinitely
-			if slow_ball_clock_reset = '1' then
-				slow_ball_clock_reset <= '0';
+			-- This is to prevent the system from staying in a state infinitely
+			if slow_ball_row_clock_reset = '1' then
+				slow_ball_row_clock_reset <= '0';
+			end if;
+			if slow_ball_col_clock_reset = '1' then
+				slow_ball_col_clock_reset <= '0';
 			end if;
 			if paddle_ball_reset = '1' then
 				paddle_ball_reset <= '0';
@@ -324,7 +349,7 @@ begin
 			-- End of a level (all blocks are broken)
 			if unsigned(blocks) = 0 then
 				paddle_ball_reset <= '1';
-				if unsigned(LEVEL) = 7 then -- Win condition
+				if unsigned(LEVEL) = 9 then -- Win condition
 					game_reset <= '1';
 				else 						-- Next level
 					LEVEL              <= std_logic_vector(unsigned(LEVEL) + 1);
@@ -340,11 +365,18 @@ begin
 			old_font_col <= font_col;
 
 			-- Ball speed control
-			if slow_ball_clock_count = MAX_BALL_CLOCK_COUNTS(to_integer(unsigned(LEVEL)) - 1) then
-				slow_ball_clock       <= '1';
-				slow_ball_clock_reset <= '1';
+			if slow_ball_row_clock_count = max_slow_ball_row_clock_count then
+				slow_ball_row_clock       <= '1';
+				slow_ball_row_clock_reset <= '1';
 			else
-				slow_ball_clock <= '0';
+				slow_ball_row_clock <= '0';
+			end if;
+
+			if slow_ball_col_clock_count = max_slow_ball_col_clock_count then
+				slow_ball_col_clock       <= '1';
+				slow_ball_col_clock_reset <= '1';
+			else
+				slow_ball_col_clock <= '0';
 			end if;
 
 			-- Paddle speed control
@@ -368,64 +400,66 @@ begin
 			end if;
 
 			-- Ball collision detection
-			if ball_col_value < 16 then -- Left wall
-				ball_col_increment <= '1';
-			elsif ball_col_value >= 784 then -- Right wall
-				ball_col_increment <= '0';
-			elsif ball_row_value < 16 then -- Top wall
-				ball_row_increment <= '1';
-			elsif ball_row_value = paddle_row_value and --  Paddle 
-			      ball_col_value >= paddle_col_value and 
-			      ball_col_value < paddle_col_value + 120 then -- Accounting for size of ball
-				if PADDLE_LEFT = '0' and PADDLE_RIGHT = '1' then
+			if ball_col_value /= last_ball_col or ball_row_value /= last_ball_row then -- Only check when ball position changes
+				last_ball_col <= ball_col_value;
+				last_ball_row <= ball_row_value;
+				if ball_col_value < 16 then -- Left wall
+					ball_col_increment <= '1';
+				elsif ball_col_value >= 784 then -- Right wall
 					ball_col_increment <= '0';
-				elsif PADDLE_LEFT = '1' and PADDLE_RIGHT = '0' then
-					ball_col_increment <= '1'; 
-				end if;
-				
-				ball_row_increment <= '0';
-				score_bonus        <= to_unsigned(1, score_bonus'length);
-			elsif ball_row_value >= 567 then -- Bottom of screen
-				paddle_ball_reset <= '1';
-				if unsigned(LIFE) = 1 then -- Loss condition
-					game_reset <= '1';
-				else                       -- Lose a life
-					LIFE               <= std_logic_vector(unsigned(LIFE) - 1);
-					ball_row_increment <= '0';
-					ball_col_increment <= '0';
-					start              <= '0';
-					score_bonus        <= to_unsigned(1, score_bonus'length);
-				end if;
-			elsif block_hit = '0' and ball_row_value <= 176 then -- Blocks area
-				if col_offset = 0 then
-					if ball_col_value < 784 and ball_col_increment = '1' and blocks(block_ball_count) = '1' then
-						blocks(block_ball_count) <= '0';
+				elsif ball_row_value < 16 then -- Top wall
+					ball_row_increment <= '1';
+				elsif ball_row_value >= paddle_row_value and --  Paddle
+						ball_row_value < paddle_row_value + 8 and
+						ball_col_value > paddle_col_value and
+						ball_col_value < paddle_col_value + 128 then
+
+					if ball_col_value < paddle_col_value + 64 then
 						ball_col_increment <= '0';
-						block_hit <= '1';
-					elsif ball_col_value > 16 and ball_col_increment = '0' and blocks(block_ball_count - 1) = '1'  then
-						blocks(block_ball_count - 1) <= '0';
+						--if ball_col_value > paddle_col_value + 32 then
+						row_col_clock_diff <= to_integer(2 * (signed(std_logic_vector(ball_col_value)) - signed(std_logic_vector(paddle_col_value)) - 32));
+						--else
+						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) - resize(2 * (32 - (ball_col_value - paddle_col_value)), max_slow_ball_row_clock_count'length));
+						--end if;
+					else
 						ball_col_increment <= '1';
-						block_hit <= '1';
-					end if;
-				end if;
-				
-				if row_offset = 0 then
-					if ball_row_value < 176 and ball_row_increment = '1' and blocks(block_ball_count) = '1' then
-						blocks(block_ball_count) <= '0';
+						row_col_clock_diff <= to_integer(2 * (96 - signed(std_logic_vector(ball_col_value)) - signed(std_logic_vector(paddle_col_value))));
+						--if ball_col_value > paddle_col_value + 96 then
+						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) - resize(2 * (ball_col_value - paddle_col_value - 96), max_slow_ball_row_clock_count'length));
+						--else
+						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) + resize(2 * (96 - (ball_col_value - paddle_col_value)), max_slow_ball_row_clock_count'length));
+						--end if;
+					end if;		
+					
+					ball_row_increment <= '0';
+					score_bonus        <= to_unsigned(1, score_bonus'length);
+				elsif ball_row_value >= 567 then -- Bottom of screen
+					paddle_ball_reset <= '1';
+					if unsigned(LIFE) = 1 then -- Loss condition
+						game_reset <= '1';
+					else                       -- Lose a life
+						LIFE               <= std_logic_vector(unsigned(LIFE) - 1);
 						ball_row_increment <= '0';
-						block_hit <= '1';
-					elsif ball_row_value > 16 and ball_row_increment = '0' and blocks(block_ball_count - 12) = '1' then
-						blocks(block_ball_count - 12) <= '0';
-						ball_row_increment <= '1';
-						block_hit <= '1';
+						ball_col_increment <= '0';
+						start              <= '0';
+						score_bonus        <= to_unsigned(1, score_bonus'length);
+					end if;
+				elsif ball_row_value <= 176 then -- Blocks area
+					if blocks(block_ball_count) = '1' then
+						if row_offset /= 0 and (col_offset = 63 or col_offset = 1) then
+								ball_col_increment <= not ball_col_increment;
+								blocks(block_ball_count) <= '0';
+								SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
+								score_bonus <= score_bonus + 1;
+						end if;
+						if col_offset /= 0 and (row_offset = 31 or row_offset = 1) then
+								ball_row_increment <= not ball_row_increment;
+								blocks(block_ball_count) <= '0';
+								SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
+								score_bonus <= score_bonus + 1;
+						end if;
 					end if;
 				end if;
-			end if;
-			
-			if block_hit = '1' then
-				SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-				score_bonus <= score_bonus + 1;
-				block_hit <= '0';
 			end if;
 
 			-- Drawing colors
