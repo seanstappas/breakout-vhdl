@@ -142,6 +142,7 @@ architecture test_pattern of g30_Breakout_Game is
 	signal slow_paddle_clock_count : std_logic_vector(15 downto 0);
 	signal slow_paddle_clock       : std_logic;
 	signal paddle_inside_borders   : std_logic := '1';
+	signal paddle_width : integer := 128;
 
 	-- Score, life and level
 	signal SCORE       : std_logic_vector(15 downto 0);
@@ -205,6 +206,30 @@ architecture test_pattern of g30_Breakout_Game is
 	signal last_ball_row : unsigned(9 downto 0);
 	
 	signal row_col_clock_diff : integer;
+	
+	signal block_hit : std_logic;
+	
+	-- Power-ups
+	signal blocks_hit_count : unsigned(2 downto 0);
+	signal powerup_enable : std_logic;
+	signal powerup_reset : std_logic;
+	signal slow_powerup_clock_count : std_logic_vector(18 downto 0);
+	signal slow_powerup_clock       : std_logic;
+	signal powerup_load       : std_logic;
+	signal powerup_row : std_logic_vector(9 downto 0);
+	signal powerup_col : std_logic_vector(9 downto 0);
+	signal powerup_type : integer;
+	signal ball_penetrate : std_logic;
+	signal left_control : std_logic;
+	signal right_control : std_logic;
+	signal left_right_flipped : std_logic;
+	
+	type std_logic_vector_array4 is array (0 to 3) of std_logic_vector(11 downto 0);
+	signal POWERUP_COLOURS : std_logic_vector_array4 := (
+		x"F0F",
+		x"F00",
+		x"0F0",
+		x"FF0");
 
 begin
 	-- Lab 4 Component Mapping
@@ -276,7 +301,7 @@ begin
 			q      => ball_col,
 			updown => ball_col_increment,
 			aload  => async_reset or paddle_ball_reset or not start,
-			data   => std_logic_vector(paddle_col_value + 60));
+			data   => std_logic_vector(paddle_col_value + paddle_width / 2 - 4));
 
 	-- Paddle counters		
 	Slow_paddle_col_counter : lpm_counter -- "slow" counter that controls the speed of the paddle
@@ -291,16 +316,32 @@ begin
 		port map(
 			clock  => slow_paddle_clock,
 			q      => paddle_col,
-			updown => PADDLE_LEFT,
+			updown => left_control,
 			aload  => async_reset or paddle_ball_reset,
-			data   => std_logic_vector(to_unsigned(336, paddle_col'length)));
+			data   => std_logic_vector(to_unsigned(336, paddle_col'length)));	
+		
+	-- Powerup counters	
+	Slow_powerup_counter : lpm_counter -- "slow" counter that controls the speed of the powerups
+		generic map(LPM_WIDTH => slow_powerup_clock_count'length)
+		port map(
+			cnt_en => powerup_enable,
+			clock  => clock,
+			q      => slow_powerup_clock_count);
+
+	Powerup_counter : lpm_counter
+		generic map(LPM_WIDTH => powerup_row'length)
+		port map(
+			clock  => slow_powerup_clock,
+			q      => powerup_row,
+			aload  => powerup_load,
+			data   => ball_row);
 	
 	
 	ball_row_value <= unsigned(ball_row);
 	ball_col_value <= unsigned(ball_col);
 
 	max_slow_ball_row_clock_count <= MAX_BALL_CLOCK_COUNTS(to_integer(unsigned(LEVEL)) - 1);
-	max_slow_ball_col_clock_count <= std_logic_vector(signed(max_slow_ball_row_clock_count) + row_col_clock_diff);
+	max_slow_ball_col_clock_count <= std_logic_vector(signed(max_slow_ball_row_clock_count) + 2000 * row_col_clock_diff);
 
 	paddle_row_value <= to_unsigned(552, 10);
 	paddle_col_value <= unsigned(paddle_col);
@@ -328,8 +369,8 @@ begin
 			end if;
 
 			-- The paddle cannot exceed the wall borders
-			if (paddle_col_value >= 655 and PADDLE_RIGHT = '0') or 
-			   (paddle_col_value <= 17 and PADDLE_LEFT = '0') then
+			if (paddle_col_value >= (783 - paddle_width) and right_control = '0') or 
+			   (paddle_col_value <= 17 and left_control = '0') then
 				paddle_inside_borders <= '0';
 			else
 				paddle_inside_borders <= '1';
@@ -343,6 +384,7 @@ begin
 				slow_ball_col_clock_reset <= '0';
 			end if;
 			if paddle_ball_reset = '1' then
+				row_col_clock_diff <= 0;
 				paddle_ball_reset <= '0';
 			end if;
 
@@ -379,6 +421,12 @@ begin
 				slow_ball_col_clock <= '0';
 			end if;
 
+			if slow_powerup_clock_count = (slow_powerup_clock_count'range => '1') then
+				slow_powerup_clock <= '1';
+			else
+				slow_powerup_clock <= '0';
+			end if;
+
 			-- Paddle speed control
 			if slow_paddle_clock_count = (slow_paddle_clock_count'range => '1') then
 				slow_paddle_clock <= '1';
@@ -397,6 +445,8 @@ begin
 				score_bonus        <= to_unsigned(1, 16);
 				game_reset         <= '0';
 				start              <= '0';
+				row_col_clock_diff <= 0;
+				powerup_reset <= '1';
 			end if;
 
 			-- Ball collision detection
@@ -409,31 +459,39 @@ begin
 					ball_col_increment <= '0';
 				elsif ball_row_value < 16 then -- Top wall
 					ball_row_increment <= '1';
+				elsif ball_row_value <= 176 and row_offset /= 0 and col_offset /= 0 then -- Blocks area
+					if blocks(block_ball_count) = '1' then
+						if row_offset = 31 or row_offset = 1 then
+								if ball_penetrate = '0' then
+									ball_row_increment <= not ball_row_increment;
+								end if;
+								blocks(block_ball_count) <= '0';
+								block_hit <= '1';
+						elsif col_offset = 63 or col_offset = 1 then
+								if ball_penetrate = '0' then
+									ball_col_increment <= not ball_col_increment;
+								end if;
+								blocks(block_ball_count) <= '0';
+								block_hit <= '1';
+						end if;
+					end if;
 				elsif ball_row_value >= paddle_row_value and --  Paddle
 						ball_row_value < paddle_row_value + 8 and
 						ball_col_value > paddle_col_value and
-						ball_col_value < paddle_col_value + 128 then
+						ball_col_value < paddle_col_value + paddle_width then
 
-					if ball_col_value < paddle_col_value + 64 then
+					if ball_col_value < paddle_col_value + (paddle_width / 2) then
 						ball_col_increment <= '0';
-						--if ball_col_value > paddle_col_value + 32 then
-						row_col_clock_diff <= to_integer(2 * (signed(std_logic_vector(ball_col_value)) - signed(std_logic_vector(paddle_col_value)) - 32));
-						--else
-						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) - resize(2 * (32 - (ball_col_value - paddle_col_value)), max_slow_ball_row_clock_count'length));
-						--end if;
+						row_col_clock_diff <= to_integer((signed(std_logic_vector(ball_col_value)) - signed(std_logic_vector(paddle_col_value)) - (paddle_width / 4)));
 					else
 						ball_col_increment <= '1';
-						row_col_clock_diff <= to_integer(2 * (96 - signed(std_logic_vector(ball_col_value)) - signed(std_logic_vector(paddle_col_value))));
-						--if ball_col_value > paddle_col_value + 96 then
-						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) - resize(2 * (ball_col_value - paddle_col_value - 96), max_slow_ball_row_clock_count'length));
-						--else
-						--	max_slow_ball_col_clock_count <= std_logic_vector(unsigned(max_slow_ball_row_clock_count) + resize(2 * (96 - (ball_col_value - paddle_col_value)), max_slow_ball_row_clock_count'length));
-						--end if;
-					end if;		
+						row_col_clock_diff <= to_integer(((3 * paddle_width / 4) - signed(std_logic_vector(ball_col_value)) + signed(std_logic_vector(paddle_col_value))));
+					end if;
 					
 					ball_row_increment <= '0';
 					score_bonus        <= to_unsigned(1, score_bonus'length);
 				elsif ball_row_value >= 567 then -- Bottom of screen
+					powerup_reset <= '1';
 					paddle_ball_reset <= '1';
 					if unsigned(LIFE) = 1 then -- Loss condition
 						game_reset <= '1';
@@ -444,22 +502,69 @@ begin
 						start              <= '0';
 						score_bonus        <= to_unsigned(1, score_bonus'length);
 					end if;
-				elsif ball_row_value <= 176 then -- Blocks area
-					if blocks(block_ball_count) = '1' then
-						if row_offset /= 0 and (col_offset = 63 or col_offset = 1) then
-								ball_col_increment <= not ball_col_increment;
-								blocks(block_ball_count) <= '0';
-								SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-								score_bonus <= score_bonus + 1;
-						end if;
-						if col_offset /= 0 and (row_offset = 31 or row_offset = 1) then
-								ball_row_increment <= not ball_row_increment;
-								blocks(block_ball_count) <= '0';
-								SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
-								score_bonus <= score_bonus + 1;
-						end if;
-					end if;
 				end if;
+			end if;
+			
+			if block_hit = '1' then
+				if powerup_enable = '0' then
+					if blocks_hit_count = 7 then
+						powerup_enable <= '1';
+						powerup_load <= '1';
+						powerup_type <= (powerup_type + 1) mod 4;
+					end if;				
+					blocks_hit_count <= blocks_hit_count + 1;
+				end if;
+				SCORE       <= std_logic_vector(unsigned(SCORE) + score_bonus);
+				score_bonus <= score_bonus + 1;
+				block_hit <= '0';
+			end if;
+			
+			if powerup_load = '1' then
+				powerup_col <= ball_col;
+				powerup_load <= '0';
+			end if;
+			
+			if powerup_enable = '1' and unsigned(powerup_row) >= 567 then
+				powerup_enable <= '0';
+			end if;
+			
+			if powerup_reset = '1' then
+				powerup_reset <= '0';
+				paddle_width <= 128;
+				ball_penetrate <= '0';
+				left_right_flipped <= '0';
+			end if;
+			
+			if powerup_enable = '1' and unsigned(powerup_row) >= paddle_row_value and
+						unsigned(powerup_row) < paddle_row_value + 16 and
+						unsigned(powerup_col) >= paddle_col_value and
+						unsigned(powerup_col) < paddle_col_value + paddle_width then
+				case powerup_type is 
+					when 0 => -- Extra life
+						SCORE <= std_logic_vector(unsigned(SCORE) + 10);
+						if (unsigned(LIFE) < 7) then
+							LIFE <= std_logic_vector(unsigned(LIFE) + 1);
+						end if;
+					when 1 => -- Halve paddle width
+						SCORE <= std_logic_vector(unsigned(SCORE) + 50);
+						paddle_width <= 64;
+					when 2 => -- Penetrating ball
+						SCORE <= std_logic_vector(unsigned(SCORE) + 5);
+						ball_penetrate <= '1';
+					when others => -- Switch left/right controls
+						SCORE <= std_logic_vector(unsigned(SCORE) + 25);
+						left_right_flipped <= '1';
+				end case;
+						
+				powerup_enable <= '0';
+			end if;
+			
+			if left_right_flipped = '1' then
+				left_control <= PADDLE_RIGHT;
+				right_control <= PADDLE_LEFT;
+			else 
+				left_control <= PADDLE_LEFT;
+				right_control <= PADDLE_RIGHT;
 			end if;
 
 			-- Drawing colors
@@ -477,10 +582,16 @@ begin
 						  ROW < (ball_row_value + 8) then
 						RGB <= x"FFF";
 					elsif COLUMN >= paddle_col_value and -- Paddle 
-						  COLUMN < (paddle_col_value + 128) and 
+						  COLUMN < (paddle_col_value + paddle_width) and 
 						  ROW >= paddle_row_value and 
 						  ROW < (paddle_row_value + 16) then
 						RGB <= x"FFF";
+					elsif powerup_enable = '1' and 
+						ROW >= unsigned(powerup_row) and
+						ROW < unsigned(powerup_row) + 7 and
+						COLUMN >= unsigned(powerup_col) and
+						COLUMN < unsigned(powerup_col) + 7 then
+							RGB <= POWERUP_COLOURS(powerup_type);
 					elsif ROW < 176 and -- Blocks
 						  (ROW - 16) mod 32 /= 0 and -- Not on black border of the blocks
 						  (COLUMN - 16) mod 64 /= 0 and 
