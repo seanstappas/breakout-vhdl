@@ -105,8 +105,8 @@ architecture test_pattern of g30_Breakout_Game is
 	-- Every element in the following array indicates the RGB color of the blocks at the associated
 	-- level. For example, level 1 has color "00F" (blue), level 2 has "0F0" (green)
 	--
-	type std_logic_vector_array_9_12 is array (0 to 8) of std_logic_vector(11 downto 0); -- 9-element array with length 12 std_logic_vector
-	signal LEVEL_COLOURS : std_logic_vector_array_9_12 := (
+	type std_logic_vector_array_7_12 is array (0 to 6) of std_logic_vector(11 downto 0); -- 9-element array with length 12 std_logic_vector
+	signal LEVEL_COLOURS : std_logic_vector_array_7_12 := (
 		x"00F",
 		x"0F0",
 		x"F00",
@@ -457,8 +457,7 @@ begin
 				ball_col_increment <= '0';
 				blocks             <= (others => '1');
 				LIFE               <= std_logic_vector(to_unsigned(5, LIFE'length));
-				--LEVEL              <= std_logic_vector(to_unsigned(1, LEVEL'length));
-				LEVEL              <= std_logic_vector(unsigned(LEVEL) + 1 mod 10);
+				LEVEL              <= std_logic_vector(to_unsigned(1, LEVEL'length));
 				SCORE              <= (others => '0');
 				score_bonus        <= to_unsigned(1, 16);
 				game_reset         <= '0';
