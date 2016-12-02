@@ -20,13 +20,14 @@ use ieee.numeric_std.all;
 use lpm.lpm_components.all;
 
 entity g30_VGA is
-	port(clock    : in  std_logic;      -- 50MHz
-		 rst      : in  std_logic;      -- reset
-		 BLANKING : out std_logic;      -- blank display when zero
+	port(
+	    clock    : in  std_logic;            -- 50MHz
+		 rst      : in  std_logic;            -- reset
+		 BLANKING : out std_logic;            -- blank display when zero
 		 ROW      : out unsigned(9 downto 0); -- line 0 to 599
 		 COLUMN   : out unsigned(9 downto 0); -- column 0 to 799
-		 HSYNC    : out std_logic;      -- horizontal sync signal
-		 VSYNC    : out std_logic);     -- vertical sync signal
+		 HSYNC    : out std_logic;            -- horizontal sync signal
+		 VSYNC    : out std_logic);           -- vertical sync signal
 end g30_VGA;
 
 architecture VGA of g30_VGA is

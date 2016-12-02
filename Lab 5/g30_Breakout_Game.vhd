@@ -114,6 +114,7 @@ architecture test_pattern of g30_Breakout_Game is
 		x"0FF",
 		x"FFF",
 		x"FF0");
+	signal current_level_colour : unsigned(11 downto 0);
 
 	-- Ball
 	signal slow_ball_row_clock_reset     : std_logic;
@@ -246,7 +247,7 @@ begin
 	-- Lab 4 Component Mapping
 	VGA1 : g30_VGA port map(
 			clock    => clock,
-			rst      => '0',
+			rst      => '0', -- The display doesn't need to be reset
 			BLANKING => BLANKING,
 			ROW      => ROW,
 			COLUMN   => COLUMN,
@@ -347,36 +348,38 @@ begin
 			aload => powerup_load,
 			data  => ball_row);
 
-	ball_row_value <= unsigned(ball_row);
-	ball_col_value <= unsigned(ball_col);
+	-- User reset (pushbutton is active LOW)
+	async_reset <= not rst;
 
+	-- Left and right controls (flip when Flipper powerup is acquired)
+	left_control  <= PADDLE_LEFT  when left_right_flipped = '0' else PADDLE_RIGHT;
+	right_control <= PADDLE_RIGHT when left_right_flipped = '0' else PADDLE_LEFT;
+
+	-- Ball signals
+	ball_row_value                <= unsigned(ball_row);
+	ball_col_value                <= unsigned(ball_col);
 	max_slow_ball_row_clock_count <= MAX_BALL_CLOCK_COUNTS(to_integer(unsigned(LEVEL)) - 1);
 	max_slow_ball_col_clock_count <= std_logic_vector(signed(max_slow_ball_row_clock_count) + 2000 * row_col_clock_diff);
 
-	paddle_row_value <= to_unsigned(552, 10);
-	paddle_col_value <= unsigned(paddle_col);
+	-- Paddle signals
+	paddle_row_value      <= to_unsigned(552, 10);
+	paddle_col_value      <= unsigned(paddle_col);
+	paddle_inside_borders <= '0' when (paddle_col_value >= (783 - paddle_width) and right_control = '0') or (paddle_col_value <= 17 and left_control = '0') else '1';
 
-	async_reset <= not rst;
-
+	-- Block signals
 	row_offset       <= (ball_row_value - 16) mod 32;
 	col_offset       <= (ball_col_value - 16) mod 64;
 	block_count      <= to_integer(((ROW - 16) / 32) * 12 + (COLUMN - 16) / 64);
 	block_ball_count <= to_integer(((ball_row_value - 16) / 32) * 12 + (ball_col_value - 16) / 64);
 
 	-- RGB values
-	RGB_text <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
-	R        <= RGB(11 downto 8);
-	G        <= RGB(7 downto 4);
-	B        <= RGB(3 downto 0);
-
-	-- Left and right controls (flip when Flipper powerup is acquired)
-	left_control <= PADDLE_LEFT when left_right_flipped = '0' else PADDLE_RIGHT;
-
-	right_control <= PADDLE_RIGHT when left_right_flipped = '0' else PADDLE_LEFT;
-
-	-- The paddle cannot exceed the wall borders
-	paddle_inside_borders <= '0' when (paddle_col_value >= (783 - paddle_width) and right_control = '0') or (paddle_col_value <= 17 and left_control = '0') else '1';
-
+	RGB_text             <= R_Text_Generator & G_Text_Generator & B_Text_Generator;
+	R                    <= RGB(11 downto 8);
+	G                    <= RGB(7 downto 4);
+	B                    <= RGB(3 downto 0);
+	current_level_colour <= unsigned(LEVEL_COLOURS(to_integer(unsigned(LEVEL)) - 1));
+	
+	-- Powerups
 	powerup_row_value <= unsigned(powerup_row);
 	powerup_col_value <= unsigned(powerup_col);
 
@@ -462,9 +465,10 @@ begin
 				score_bonus        <= to_unsigned(1, 16);
 				game_reset         <= '0';
 				start              <= '0';
-				row_col_clock_diff <= 0;
+				row_col_clock_diff <=  0;
 				powerup_reset      <= '1';
 				powerup_enable     <= '0';
+				powerup_type 		 <=  0;
 			end if;
 
 			-- Ball collision detection
@@ -550,7 +554,7 @@ begin
 			end if;
 			
 			if powerup_enable = '1' and
-						powerup_row_value >= paddle_row_value and -- Powerup obtained
+						powerup_row_value >= (paddle_row_value - 7) and -- Powerup obtained
 						powerup_row_value < paddle_row_value + 16 and
 						powerup_col_value >= paddle_col_value and
 						powerup_col_value < paddle_col_value + paddle_width then
@@ -614,7 +618,7 @@ begin
 						  (COLUMN - 16) mod 64 /= 0 and 
 						   COLUMN /= 783 then
 						if blocks(block_count) = '1' then -- Intact block
-							RGB <= std_logic_vector(unsigned(LEVEL_COLOURS(to_integer(unsigned(LEVEL)) - 1)) - resize(to_unsigned(block_count mod 12, RGB'length) * (unsigned(LEVEL_COLOURS(to_integer(unsigned(LEVEL)) - 1)) and x"111"),12) ); -- Various shades of colour
+							RGB <= std_logic_vector(current_level_colour - resize(to_unsigned(block_count mod 12, RGB'length) * (current_level_colour and x"111"), 12) ); -- Various shades of colour
 						else
 							RGB <= x"000";
 						end if;
@@ -622,7 +626,7 @@ begin
 						RGB <= x"000";
 					end if;
 				else
-					RGB <= RGB_text; -- Map to r,g,b signals from text generator
+					RGB <= RGB_text; -- Map to RGB signals from text generator
 				end if;
 				
 				if ball_penetrate = '1' and start = '1' then -- Ball trailing effect
@@ -635,8 +639,7 @@ begin
 							RGB <= LAST_BALL_COLOURS(last_ball_position_index);
 						end if;
 					end loop;
-				end if;
-				
+				end if;	
 			else
 				RGB <= x"000";
 			end if;
