@@ -22,10 +22,10 @@ use lpm.lpm_components.all;
 entity g30_Breakout_Game is
 	port(
 		clock        : in  std_logic;   -- 50MHz
-		rst          : in  std_logic;   -- reset
+		rst          : in  std_logic;   -- user input reset button
 		PADDLE_LEFT  : in  std_logic;   -- user input button to move the paddle left
 		PADDLE_RIGHT : in  std_logic;   -- user input button to move the paddle right
-		LAUNCH       : in  std_logic;
+		LAUNCH       : in  std_logic;	-- user input button to launch the ball
 		R, G, B      : out std_logic_vector(3 downto 0); -- colors
 		HSYNC        : out std_logic;   -- horizontal sync signal
 		VSYNC        : out std_logic);  -- vertical sync signal
@@ -131,9 +131,9 @@ architecture test_pattern of g30_Breakout_Game is
 	signal ball_col_value                : unsigned(9 downto 0);
 	signal ball_row_increment            : std_logic;
 	signal ball_col_increment            : std_logic;
-	signal last_ball_col						 : unsigned(9 downto 0);
-	signal last_ball_row 					 : unsigned(9 downto 0);
-	signal row_col_clock_diff 				 : integer;
+	signal last_ball_col                 : unsigned(9 downto 0);
+	signal last_ball_row                 : unsigned(9 downto 0);
+	signal row_col_clock_diff            : integer;
 
 	-- Ball speed control
 	--
@@ -159,9 +159,9 @@ architecture test_pattern of g30_Breakout_Game is
 	-- Last positions and colours of the ball (used for the ball-trailing visual effect).
 	type unsigned_array_5_10 is array (0 to 4) of unsigned(9 downto 0); -- 5-element array with length 10 unsigned
 	type std_logic_vector_array_5_12 is array (0 to 4) of std_logic_vector(11 downto 0); -- 5-element array with length 12 std_logic_vector
-	signal LAST_BALL_ROWS    			 : unsigned_array_5_10;
-	signal LAST_BALL_COLUMNS 			 : unsigned_array_5_10;
-	signal LAST_BALL_COLOURS			 : std_logic_vector_array_5_12 := (
+	signal LAST_BALL_ROWS    : unsigned_array_5_10;
+	signal LAST_BALL_COLUMNS : unsigned_array_5_10;
+	signal LAST_BALL_COLOURS : std_logic_vector_array_5_12 := ( -- the "rainbow" colours
 		x"F00",
 		x"0F0",
 		x"00F",
@@ -187,12 +187,12 @@ architecture test_pattern of g30_Breakout_Game is
 	-- │ 48 │ 49 │ 50 │ 51 │ 52 │ 53 │ 54 │ 55 │ 56 │ 57 │ 58 │ 59 │
 	-- └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
 	--
-	signal blocks 				: std_logic_vector(59 downto 0) := (others => '1');
+	signal blocks           : std_logic_vector(59 downto 0) := (others => '1');
 	signal block_count      : integer range 0 to 59;
 	signal block_ball_count : integer range 0 to 59;
 	signal col_offset       : unsigned(9 downto 0);
 	signal row_offset       : unsigned(9 downto 0);
-	signal block_hit 			: std_logic;
+	signal block_hit        : std_logic;
 
 	-- Paddle
 	signal paddle_col              : std_logic_vector(9 downto 0);
@@ -593,7 +593,7 @@ begin
 				if font_bit = '0' then
 					if TEXT_ROW = "10010" then
 						RGB <= x"000";
-					elsif COLUMN < 16 or   -- Left wall
+					elsif COLUMN < 16 or    -- Left wall
 						   COLUMN >= 784 or -- Right wall
 					 	   ROW < 16 then    -- Top wall
 						RGB <= x"0FF";
