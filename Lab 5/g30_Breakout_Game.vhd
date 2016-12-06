@@ -456,6 +456,7 @@ begin
 
 			-- Reset conditions (user-input reset, or win condition, or loss condition)
 			if async_reset = '1' or game_reset = '1' then
+				paddle_ball_reset  <= '1';
 				ball_row_increment <= '0';
 				ball_col_increment <= '0';
 				blocks             <= (others => '1');
@@ -468,7 +469,7 @@ begin
 				row_col_clock_diff <=  0;
 				powerup_reset      <= '1';
 				powerup_enable     <= '0';
-				powerup_type 		 <=  0;
+				powerup_type       <=  0;
 			end if;
 
 			-- Ball collision detection
@@ -534,7 +535,7 @@ begin
 			end if;
 			
 			if block_hit = '1' then
-				if powerup_enable = '0' then
+				if powerup_enable = '0' and unsigned(blocks) /= 0 then -- Make sure we are not hitting the final block
 					if blocks_hit_count = 7 then -- Create a powerup after 7 blocks are hit (while there isn't another powerup on the screen)
 						powerup_enable <= '1';
 						powerup_load <= '1';
