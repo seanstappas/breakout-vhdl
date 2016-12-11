@@ -1,5 +1,5 @@
 # Breakout in VHDL
-The biweekly labs for ECSE-323: Digital System Design (Fall 2016) at McGill University. The ultimate goal of these labs is to create a fucntional Breakout game in VHDL to be played on the Altera DE1 board with a VGA monitor.
+The biweekly labs for ECSE-323: Digital System Design (Fall 2016) at McGill University. The ultimate goal of these labs is to create a functional Breakout game in VHDL to be played on the Altera DE1 board with a VGA monitor.
 
 The final breakout game and .sof file can be found in the Lab 5 folder.
 
